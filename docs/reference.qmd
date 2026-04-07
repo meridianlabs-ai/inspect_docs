@@ -1,6 +1,6 @@
 ---
 title: Reference
-lms-description: Generating API reference pages for your Python package and its Click CLI commands.
+llms-description: Generating API reference pages for your Python package and its Click CLI commands.
 ---
 
 Reference pages document your package's public API. Place `.qmd` files in a `reference/` directory and Inspect Docs auto-discovers them, builds a reference sidebar, and generates a cross-reference index. H3 headings on each page are replaced with full API documentation generated from your Python source.
@@ -15,7 +15,7 @@ Reference pages follow these filename patterns:
 
 ## Python API
 
-### Module pages
+### Module Pages
 
 Create a `.qmd` file whose `title` matches your module name. Use H2 headings for organizational sections (they render as-is) and H3 headings for each symbol to document:
 
@@ -37,7 +37,7 @@ description: Core tasks and utilities.
 
 Each H3 heading is replaced with the full function or class documentation: signature, docstring, parameters, attributes, methods, and a "source" link pointing at your repo on GitHub. The H2 headings remain as section separators in the rendered sidebar.
 
-### Submodule pages
+### Submodule Pages
 
 For submodules, use a dotted title:
 
@@ -123,6 +123,6 @@ Some additional context about this function…
 
 The heading content becomes the display title while the `reference` attribute specifies which Python object to document. The rest of the heading's section — including any prose you write between H3s — is preserved as-is.
 
-## Reference index
+## Reference Index
 
 A `reference/index.qmd` is automatically generated from the discovered reference pages. It groups API pages and CLI command pages into separate tables, each row showing the page title and its `description` field. You don't need to create or maintain this file — just ensure every reference page has a short `description` in its frontmatter so the index reads nicely.

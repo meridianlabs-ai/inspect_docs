@@ -11,7 +11,7 @@ By default, Inspect Docs will symlink any `README.md` and `CHANGELOG.md` from th
 
 If you'd rather write a dedicated landing page that's different from your README, just create `docs/index.qmd` and populate it however you like—the rest of the site behaves identically.
 
-Add more articles by creating `.qmd` file anywhere in your docs directory with a title and (optionally) a description in the frontmatter:
+Add more articles by creating a `.qmd` file anywhere in your docs directory with a title and (optionally) a description in the frontmatter:
 
 ```markdown
 ---

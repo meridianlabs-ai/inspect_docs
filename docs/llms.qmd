@@ -7,7 +7,7 @@ llms-description: Making your docs LLM-friendly with auto-generated llms.txt and
 
 Inspect Docs produces an [`llms.txt`](https://llmstxt.org) index page at the root of your site and a plain-Markdown source for every rendered page, giving language models a structured entry point and clean raw markdown content to work with.
 
-The file is is built from your site's `title`, `description`, `navigation`, and reference pages, and looks roughly like this:
+The file is built from your site's `title`, `description`, `navigation`, and reference pages, and looks roughly like this:
 
 ```markdown
 # My Package

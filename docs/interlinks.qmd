@@ -7,14 +7,14 @@ Interlinks turn inline code references like `` `MyClass` `` and `` `my_function(
 
 ## Local References
 
-Inspect Docss scans the rendered content on every page for inline code spans and attempts to resolve each one as a symbol in your project's reference index. Two heuristics drive the lookup:
+Inspect Docs scans the rendered content on every page for inline code spans and attempts to resolve each one as a symbol in your project's reference index. Two heuristics drive the lookup:
 
 - A code span that starts with an uppercase letter (e.g. `` `MyClass` ``, `` `TaskResult` ``) is treated as a class or type reference.
-- A code span that ends with `()`** (e.g. `` `my_function()` ``, `` `run_task()` ``) is treated as a function or method reference.
+- A code span that ends with `()` (e.g. `` `my_function()` ``, `` `run_task()` ``) is treated as a function or method reference.
 
 If the lookup succeeds, the code span is rewritten as a link to the symbol's reference page. If it fails, the code span is left as plain code.
 
-## External Reference
+## External References
 
 You can link to API symbols documented in other Inspect Docs sites by declaring them under `external_refs` in `_quarto.yml`:
 
@@ -54,9 +54,9 @@ The string `MyClass`{.noref} is the expected value here.
 
 The code span renders as plain code with no lookup attempted. This only affects the annotated span; other references on the same page continue to resolve normally.
 
-## Publising Refs
+## Publishing Refs
 
-Every site built with Inspect Docs is automatically a valid `external_refs` target. When you render your site, Inspect Docs  generates `reference/refs.json` as part of the normal build and publishes it alongside the rest of the site.
+Every site built with Inspect Docs is automatically a valid `external_refs` target. When you render your site, Inspect Docs generates `reference/refs.json` as part of the normal build and publishes it alongside the rest of the site.
 
 Other projects can point at your site's URL and pick up your symbols:
 
