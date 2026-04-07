@@ -7,7 +7,7 @@ Inspect Docs helps you create documentation websites for Python packages using Q
 
 - Author articles using all the features of standard Quarto markdown.
 - Generate API reference pages from your source code via [griffe](https://mkdocstrings.github.io/griffe/).
-- Automatically turn inline code references (e.g. ``` `my_function()` ```) into links to the right reference page.
+- Automatically turn inline code references into links to documentation.
 - Generate an [llms.txt](https://llmstxt.org) and Markdown doc pages so LLMs can ingest your site.
 
 
@@ -37,7 +37,7 @@ cd docs
 quarto update meridianlabs-ai/inspect-docs
 ```
 
-### Minimal configuration
+### Configuration
 
 Edit `docs/_quarto.yml` to reference the project type and provide basic site configuration:
 
@@ -85,7 +85,7 @@ Then install them:
 uv sync
 ```
 
-### First render
+### Preview
 
 By default, Inspect Docs will symlink to any `README.md` and `CHANGELOG.md` in the root of your repo and create a site based on their contents. Preview it with:
 
