@@ -78,7 +78,7 @@
     "href": "index.html#reference",
     "title": "Inspect Docs",
     "section": "Reference",
-    "text": "Reference\nCreate a .qmd file in a reference/ directory whose title matches your module, then add H3 headings for each symbol to document:\n---\ntitle: my_package\n---\n\n### my_function\n### MyClass\nEach H3 is replaced with the full signature, docstring, parameters, attributes, and a link to the source on GitHub — generated via griffe. Docstrings must be Google-style. See Reference for a more in-depth guide to creating reference docs.",
+    "text": "Reference\nCreate a .qmd file in a reference/ directory, set a reference: field to the Python import path the page documents, and add H3 headings for each symbol:\n---\ntitle: Async Helpers\nreference: my_package.aio\n---\n\n### run_async\n### gather\nEach H3 is replaced with the full signature, docstring, parameters, attributes, and a link to the source on GitHub — generated via griffe. The reference: field is required (pages without it are ignored) and tells Inspect Docs which module’s symbols to look up. Docstrings must be Google-style. See Reference for a more in-depth guide.",
     "crumbs": [
       "Home"
     ]
@@ -108,7 +108,7 @@
     "href": "index.html#options",
     "title": "Inspect Docs",
     "section": "Options",
-    "text": "Options\nOptions available under inspect-docs: in _quarto.yml:\n\n\n\nField\nDescription\n\n\n\n\ntitle\nSite title. Auto-extracted from the index page H1 if omitted.\n\n\ndescription\nSite description. Used for OpenGraph/Twitter cards and the llms.txt header.\n\n\nurl\nCanonical site URL. Used when generating absolute links in llms.txt.\n\n\nrepo\nGitHub repo as org/repo. Enables the navbar GitHub icon and source links on reference pages.\n\n\norg\nOrganization name. Adds a left-side footer link.\n\n\nmodule\nPython import name. Auto-discovered from pyproject.toml; set explicitly only when the import name differs from the distribution name.\n\n\nnavigation\nNavbar and sidebar entries (see Articles).\n\n\nsidebar\nShow the sidebar. Defaults to true when navigation is set.\n\n\nexternal_refs\nMap of package_name: docs_url for cross-package interlinking (see Interlinks).",
+    "text": "Options\nOptions available under inspect-docs: in _quarto.yml:\n\n\n\nField\nDescription\n\n\n\n\ntitle\nSite title. Auto-extracted from the index page H1 if omitted.\n\n\ndescription\nSite description. Used for OpenGraph/Twitter cards and the llms.txt header.\n\n\nurl\nCanonical site URL. Used when generating absolute links in llms.txt.\n\n\nrepo\nGitHub repo as org/repo. Enables the navbar GitHub icon and source links on reference pages.\n\n\norg\nOrganization name. Adds a left-side footer link.\n\n\nmodule\nPython import name. Auto-discovered from pyproject.toml; set explicitly only when the import name differs from the distribution name.\n\n\ncli\nCLI binary name (for Click command pages). Auto-discovered from pyproject.toml’s [project.scripts]; set explicitly when the binary name differs from the module name.\n\n\nnavigation\nNavbar and sidebar entries (see Articles).\n\n\nsidebar\nShow the sidebar. Defaults to true when navigation is set.\n\n\nexternal_refs\nMap of package_name: docs_url for cross-package interlinking (see Interlinks).",
     "crumbs": [
       "Home"
     ]
@@ -118,14 +118,21 @@
     "href": "CHANGELOG.html",
     "title": "Inspect Docs",
     "section": "",
-    "text": "Initial release."
+    "text": "Changes required for Inspect Scout docs migration."
   },
   {
     "objectID": "CHANGELOG.html#april-2026",
     "href": "CHANGELOG.html#april-2026",
     "title": "Inspect Docs",
     "section": "",
-    "text": "Initial release."
+    "text": "Changes required for Inspect Scout docs migration."
+  },
+  {
+    "objectID": "CHANGELOG.html#april-2026-1",
+    "href": "CHANGELOG.html#april-2026-1",
+    "title": "Inspect Docs",
+    "section": "1.0.0 (07 April 2026)",
+    "text": "1.0.0 (07 April 2026)\n\nInitial release."
   },
   {
     "objectID": "llms.html",
@@ -165,7 +172,7 @@
     "href": "reference.html",
     "title": "Reference",
     "section": "",
-    "text": "Reference pages document your package’s public API. Place .qmd files in a reference/ directory and Inspect Docs auto-discovers them, builds a reference sidebar, and generates a cross-reference index. H3 headings on each page are replaced with full API documentation generated from your Python source.\nReference pages follow these filename patterns:",
+    "text": "Reference pages document your package’s public API. Place .qmd files in a reference/ directory and Inspect Docs auto-discovers them, builds a reference sidebar, and generates a cross-reference index. H3 headings on each page are replaced with full API documentation generated from your Python source.\nEvery reference page must declare its binding via a frontmatter reference: field — the Python import path (for API pages) or CLI command path (for CLI pages) that the page documents. Pages without a reference: field are ignored. Filenames are not used for matching, so you can name the files however you like.",
     "crumbs": [
       "Home",
       "Reference"
@@ -176,7 +183,7 @@
     "href": "reference.html#python-api",
     "title": "Reference",
     "section": "Python API",
-    "text": "Python API\n\nModule Pages\nCreate a .qmd file whose title matches your module name. Use H2 headings for organizational sections (they render as-is) and H3 headings for each symbol to document:\n---\ntitle: my_package\ndescription: Core tasks and utilities.\n---\n\n## Tasks\n\n### my_function\n### MyClass\n\n## Utilities\n\n### helper_function\nEach H3 heading is replaced with the full function or class documentation: signature, docstring, parameters, attributes, methods, and a “source” link pointing at your repo on GitHub. The H2 headings remain as section separators in the rendered sidebar.\n\n\nSubmodule Pages\nFor submodules, use a dotted title:\n---\ntitle: my_package.utils\ndescription: Helper functions for working with tasks.\n---\n\n### format_output\n### parse_input\nThe symbol names under a submodule page are resolved relative to that submodule — so format_output above becomes my_package.utils.format_output.\n\n\nDoc Generation\nFor each documented symbol, the following is extracted and rendered:\n\nThe full signature (including type annotations and defaults).\nThe docstring summary and extended description.\nParameters, with types and per-parameter descriptions.\nFor classes: attributes, methods, and inherited members.\nA “source” link back to the exact file and line in your repo (built from the repo field in _quarto.yml).\n\nDocstrings must be written in Google style. For example:\ndef run_task(name: str, *, timeout: float = 30.0) -&gt; TaskResult:\n    \"\"\"Run a task by name.\n\n    Args:\n        name: The registered task name.\n        timeout: Maximum seconds to wait before cancelling.\n\n    Returns:\n        The result of the task, or a cancellation marker if it timed out.\n\n    Raises:\n        TaskNotFoundError: If no task is registered under `name`.\n    \"\"\"\nIf a symbol has no docstring, inspect-docs emits a warning during the render and skips that entry.",
+    "text": "Python API\nA reference page documents a single module. Set reference: to that module’s import path, then add H2 headings for organizational sections (rendered as-is) and H3 headings for each symbol:\n---\ntitle: Async Helpers\nreference: my_package.aio\n---\n\n## Coroutines\n\n### run_async\n### gather\n\n## Utilities\n\n### shield\nThe H3 headings above resolve to my_package.aio.run_async, my_package.aio.gather, and my_package.aio.shield. Each is replaced with the full function or class documentation: signature, docstring, parameters, attributes, methods, and a “source” link pointing at your repo on GitHub.\nA page documenting the project’s main module sets reference: to that module name:\n---\ntitle: Scanner API\nreference: my_package\n---\n\n### Scanner\n### scanner_decorator\nThe H3 headings here resolve to my_package.Scanner and my_package.scanner_decorator.\n\nTitle defaulting\nPage title precedence:\n\nFrontmatter title: if present.\nElse, the value of reference: (which is convenient for single-module pages — reference: my_package.utils becomes the displayed title with no extra typing).\nElse, Quarto’s normal title behavior (first H1 / filename).\n\n\n\nDocstring conventions\nDocstrings must be written in Google style:\ndef run_task(name: str, *, timeout: float = 30.0) -&gt; TaskResult:\n    \"\"\"Run a task by name.\n\n    Args:\n        name: The registered task name.\n        timeout: Maximum seconds to wait before cancelling.\n\n    Returns:\n        The result of the task, or a cancellation marker if it timed out.\n\n    Raises:\n        TaskNotFoundError: If no task is registered under `name`.\n    \"\"\"\nIf a symbol has no docstring, Inspect Docs emits a warning during the render and skips that entry.",
     "crumbs": [
       "Home",
       "Reference"
@@ -187,7 +194,7 @@
     "href": "reference.html#cli-commands",
     "title": "Reference",
     "section": "CLI Commands",
-    "text": "CLI Commands\nFor packages that expose a Click CLI, reference pages for individual commands use the filename convention &lt;module&gt;_&lt;command&gt;.qmd:\n---\ntitle: my_package run\ndescription: Run a task.\n---\nGiven the filename my_package_run.qmd, inspect-docs loads the Click command from my_package._cli.run (attribute run) and populates the page with usage, description, options, and subcommands. No body content is needed — the frontmatter is enough.",
+    "text": "CLI Commands\nFor packages that expose a Click CLI, reference pages bind to a command via the same reference: field:\n---\nreference: my_package run\n---\nThe page displays as my_package run (title defaulted from reference:) and is populated with usage, description, options, and subcommands derived from the Click command at my_package._cli.run.\nA page is treated as a CLI command page when its reference: value starts with &lt;cli&gt; (binary name + space) or equals &lt;cli&gt; exactly. Otherwise it’s an API page.\n\nCLI binary name\nInspect Docs needs to know your CLI binary name to recognize CLI pages. By default it’s auto-discovered from pyproject.toml’s [project.scripts] table — preferring an entry whose value references {module}._cli. If that doesn’t pick the right one, set it explicitly in _quarto.yml:\ninspect-docs:\n  module: my_package\n  cli: my-binary    # only needed if it differs from the module name\nThe CLI binary name is independent of the Python module name. For example, a package named inspect_scout whose pyproject.toml exposes a scout script would set (or auto-discover) cli: scout, and CLI pages would use reference: scout &lt;command&gt;.",
     "crumbs": [
       "Home",
       "Reference"
@@ -198,7 +205,7 @@
     "href": "reference.html#inline-reference",
     "title": "Reference",
     "section": "Inline Reference",
-    "text": "Inline Reference\nYou can embed API reference documentation on any page by using the reference attribute on a heading.\nFirst, add a reference field to the page’s frontmatter pointing at the module the symbols live in:\n---\ntitle: Getting Started\nreference: my_package\n---\nThen use the reference attribute on any heading:\n## Key functions\n\n### My Function {reference=\"my_function\"}\n\nSome additional context about this function…\n\n### My Class {reference=\"MyClass\"}\nThe heading content becomes the display title while the reference attribute specifies which Python object to document. Prose between H3s is preserved as-is.",
+    "text": "Inline Reference\nYou can embed API reference documentation on any article page (i.e. outside reference/) by using the reference attribute on a heading:\n---\ntitle: Getting Started\nreference: my_package\n---\n\n## Key functions\n\n### My Function {reference=\"my_function\"}\n\nSome additional context about this function…\n\n### My Class {reference=\"MyClass\"}\nThe page-level reference: field declares the binding (same field as on reference pages). On article pages outside reference/, only headings with an explicit {reference=\"...\"} attribute become symbols; plain H3s remain plain headings.",
     "crumbs": [
       "Home",
       "Reference"

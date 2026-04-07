@@ -109,18 +109,19 @@ Simple items become navbar links and sidebar entries. Items with `contents` beco
 
 ## Reference
 
-Create a `.qmd` file in a `reference/` directory whose title matches your module, then add H3 headings for each symbol to document:
+Create a `.qmd` file in a `reference/` directory, set a `reference:` field to the Python import path the page documents, and add H3 headings for each symbol:
 
 ``` markdown
 ---
-title: my_package
+title: Async Helpers
+reference: my_package.aio
 ---
 
-### my_function
-### MyClass
+### run_async
+### gather
 ```
 
-Each H3 is replaced with the full signature, docstring, parameters, attributes, and a link to the source on GitHub — generated via [griffe](https://mkdocstrings.github.io/griffe/). Docstrings must be [Google-style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings). See [Reference](reference.html.md) for a more in-depth guide to creating reference docs.
+Each H3 is replaced with the full signature, docstring, parameters, attributes, and a link to the source on GitHub — generated via [griffe](https://mkdocstrings.github.io/griffe/). The `reference:` field is required (pages without it are ignored) and tells Inspect Docs which module’s symbols to look up. Docstrings must be [Google-style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings). See [Reference](reference.html.md) for a more in-depth guide.
 
 ## Interlinks
 
@@ -150,6 +151,7 @@ Options available under `inspect-docs:` in `_quarto.yml`:
 | `repo` | GitHub repo as `org/repo`. Enables the navbar GitHub icon and source links on reference pages. |
 | `org` | Organization name. Adds a left-side footer link. |
 | `module` | Python import name. Auto-discovered from `pyproject.toml`; set explicitly only when the import name differs from the distribution name. |
+| `cli` | CLI binary name (for Click command pages). Auto-discovered from `pyproject.toml`’s `[project.scripts]`; set explicitly when the binary name differs from the module name. |
 | `navigation` | Navbar and sidebar entries (see [Articles](articles.html.md)). |
 | `sidebar` | Show the sidebar. Defaults to `true` when `navigation` is set. |
 | `external_refs` | Map of `package_name: docs_url` for cross-package interlinking (see [Interlinks](interlinks.html.md)). |

@@ -79,7 +79,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-523c183989f2e77a39a856386ecf0303.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-00d6323372c11ee1e1ff703f7da802e4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -258,81 +258,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Reference pages document your package’s public API. Place <code>.qmd</code> files in a <code>reference/</code> directory and Inspect Docs auto-discovers them, builds a reference sidebar, and generates a cross-reference index. H3 headings on each page are replaced with full API documentation generated from your Python source.</p>
-<p>Reference pages follow these filename patterns:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 38%">
-<col style="width: 30%">
-<col style="width: 31%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Pattern</th>
-<th>Type</th>
-<th>Example</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>&lt;module&gt;.qmd</code></td>
-<td>API (main module)</td>
-<td><code>my_package.qmd</code></td>
-</tr>
-<tr class="even">
-<td><code>&lt;module&gt;.&lt;sub&gt;.qmd</code></td>
-<td>API (submodule)</td>
-<td><code>my_package.utils.qmd</code></td>
-</tr>
-<tr class="odd">
-<td><code>&lt;module&gt;_&lt;command&gt;.qmd</code></td>
-<td>CLI command</td>
-<td><code>my_package_run.qmd</code></td>
-</tr>
-</tbody>
-</table>
+<p>Every reference page must declare its binding via a frontmatter <code>reference:</code> field — the Python import path (for API pages) or CLI command path (for CLI pages) that the page documents. Pages without a <code>reference:</code> field are ignored. Filenames are not used for matching, so you can name the files however you like.</p>
 <section id="python-api" class="level2">
 <h2 class="anchored" data-anchor-id="python-api">Python API</h2>
-<section id="module-pages" class="level3">
-<h3 class="anchored" data-anchor-id="module-pages">Module Pages</h3>
-<p>Create a <code>.qmd</code> file whose <code>title</code> matches your module name. Use H2 headings for organizational sections (they render as-is) and H3 headings for each symbol to document:</p>
+<p>A reference page documents a single module. Set <code>reference:</code> to that module’s import path, then add H2 headings for organizational sections (rendered as-is) and H3 headings for each symbol:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> my_package</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> Core tasks and utilities.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Async Helpers</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">reference:</span><span class="co"> my_package.aio</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tasks</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## Coroutines</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">### my_function</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">### MyClass</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">### run_async</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">### gather</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">## Utilities</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">### helper_function</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Each H3 heading is replaced with the full function or class documentation: signature, docstring, parameters, attributes, methods, and a “source” link pointing at your repo on GitHub. The H2 headings remain as section separators in the rendered sidebar.</p>
-</section>
-<section id="submodule-pages" class="level3">
-<h3 class="anchored" data-anchor-id="submodule-pages">Submodule Pages</h3>
-<p>For submodules, use a dotted title:</p>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">### shield</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The H3 headings above resolve to <code>my_package.aio.run_async</code>, <code>my_package.aio.gather</code>, and <code>my_package.aio.shield</code>. Each is replaced with the full function or class documentation: signature, docstring, parameters, attributes, methods, and a “source” link pointing at your repo on GitHub.</p>
+<p>A page documenting the project’s main module sets <code>reference:</code> to that module name:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> my_package.utils</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> Helper functions for working with tasks.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Scanner API</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">reference:</span><span class="co"> my_package</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">### format_output</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### parse_input</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The symbol names under a submodule page are resolved relative to that submodule — so <code>format_output</code> above becomes <code>my_package.utils.format_output</code>.</p>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">### Scanner</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### scanner_decorator</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The H3 headings here resolve to <code>my_package.Scanner</code> and <code>my_package.scanner_decorator</code>.</p>
+<section id="title-defaulting" class="level3">
+<h3 class="anchored" data-anchor-id="title-defaulting">Title defaulting</h3>
+<p>Page title precedence:</p>
+<ol type="1">
+<li>Frontmatter <code>title:</code> if present.</li>
+<li>Else, the value of <code>reference:</code> (which is convenient for single-module pages — <code>reference: my_package.utils</code> becomes the displayed title with no extra typing).</li>
+<li>Else, Quarto’s normal title behavior (first H1 / filename).</li>
+</ol>
 </section>
-<section id="doc-generation" class="level3">
-<h3 class="anchored" data-anchor-id="doc-generation">Doc Generation</h3>
-<p>For each documented symbol, the following is extracted and rendered:</p>
-<ul>
-<li>The full signature (including type annotations and defaults).</li>
-<li>The docstring summary and extended description.</li>
-<li>Parameters, with types and per-parameter descriptions.</li>
-<li>For classes: attributes, methods, and inherited members.</li>
-<li>A “source” link back to the exact file and line in your repo (built from the <code>repo</code> field in <code>_quarto.yml</code>).</li>
-</ul>
-<p>Docstrings must be written in <a href="https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings">Google style</a>. For example:</p>
+<section id="docstring-conventions" class="level3">
+<h3 class="anchored" data-anchor-id="docstring-conventions">Docstring conventions</h3>
+<p>Docstrings must be written in <a href="https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings">Google style</a>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> run_task(name: <span class="bu">str</span>, <span class="op">*</span>, timeout: <span class="bu">float</span> <span class="op">=</span> <span class="fl">30.0</span>) <span class="op">-&gt;</span> TaskResult:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Run a task by name.</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -346,35 +310,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">        TaskNotFoundError: If no task is registered under `name`.</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>If a symbol has no docstring, <code>inspect-docs</code> emits a warning during the render and skips that entry.</p>
+<p>If a symbol has no docstring, Inspect Docs emits a warning during the render and skips that entry.</p>
 </section>
 </section>
 <section id="cli-commands" class="level2">
 <h2 class="anchored" data-anchor-id="cli-commands">CLI Commands</h2>
-<p>For packages that expose a <a href="https://click.palletsprojects.com/">Click</a> CLI, reference pages for individual commands use the filename convention <code>&lt;module&gt;_&lt;command&gt;.qmd</code>:</p>
+<p>For packages that expose a <a href="https://click.palletsprojects.com/">Click</a> CLI, reference pages bind to a command via the same <code>reference:</code> field:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> my_package run</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> Run a task.</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Given the filename <code>my_package_run.qmd</code>, <code>inspect-docs</code> loads the Click command from <code>my_package._cli.run</code> (attribute <code>run</code>) and populates the page with usage, description, options, and subcommands. No body content is needed — the frontmatter is enough.</p>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="an">reference:</span><span class="co"> my_package run</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The page displays as <code>my_package run</code> (title defaulted from <code>reference:</code>) and is populated with usage, description, options, and subcommands derived from the Click command at <code>my_package._cli.run</code>.</p>
+<p>A page is treated as a CLI command page when its <code>reference:</code> value starts with <code>&lt;cli&gt;</code> (binary name + space) or equals <code>&lt;cli&gt;</code> exactly. Otherwise it’s an API page.</p>
+<section id="cli-binary-name" class="level3">
+<h3 class="anchored" data-anchor-id="cli-binary-name">CLI binary name</h3>
+<p>Inspect Docs needs to know your CLI binary name to recognize CLI pages. By default it’s auto-discovered from <code>pyproject.toml</code>’s <code>[project.scripts]</code> table — preferring an entry whose value references <code>{module}._cli</code>. If that doesn’t pick the right one, set it explicitly in <code>_quarto.yml</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect-docs</span><span class="kw">:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">module</span><span class="kw">:</span><span class="at"> my_package</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">cli</span><span class="kw">:</span><span class="at"> my-binary</span><span class="co">    # only needed if it differs from the module name</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The CLI binary name is independent of the Python module name. For example, a package named <code>inspect_scout</code> whose <code>pyproject.toml</code> exposes a <code>scout</code> script would set (or auto-discover) <code>cli: scout</code>, and CLI pages would use <code>reference: scout &lt;command&gt;</code>.</p>
+</section>
 </section>
 <section id="inline-reference" class="level2">
 <h2 class="anchored" data-anchor-id="inline-reference">Inline Reference</h2>
-<p>You can embed API reference documentation on any page by using the <code>reference</code> attribute on a heading.</p>
-<p>First, add a <code>reference</code> field to the page’s frontmatter pointing at the module the symbols live in:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Getting Started</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="an">reference:</span><span class="co"> my_package</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Then use the <code>reference</code> attribute on any heading:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key functions</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">### My Function {reference="my_function"}</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>Some additional context about this function…</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### My Class {reference="MyClass"}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>The heading content becomes the display title while the <code>reference</code> attribute specifies which Python object to document. Prose between H3s is preserved as-is.</p>
+<p>You can embed API reference documentation on any article page (i.e.&nbsp;outside <code>reference/</code>) by using the <code>reference</code> attribute on a heading:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Getting Started</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="an">reference:</span><span class="co"> my_package</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">## Key functions</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">### My Function {reference="my_function"}</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>Some additional context about this function…</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">### My Class {reference="MyClass"}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The page-level <code>reference:</code> field declares the binding (same field as on reference pages). On article pages outside <code>reference/</code>, only headings with an explicit <code>{reference="..."}</code> attribute become symbols; plain H3s remain plain headings.</p>
 </section>
 <section id="reference-index" class="level2">
 <h2 class="anchored" data-anchor-id="reference-index">Reference Index</h2>

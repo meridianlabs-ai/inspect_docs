@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-523c183989f2e77a39a856386ecf0303.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-00d6323372c11ee1e1ff703f7da802e4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -339,14 +339,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="reference" class="level2">
 <h2 class="anchored" data-anchor-id="reference">Reference</h2>
-<p>Create a <code>.qmd</code> file in a <code>reference/</code> directory whose title matches your module, then add H3 headings for each symbol to document:</p>
+<p>Create a <code>.qmd</code> file in a <code>reference/</code> directory, set a <code>reference:</code> field to the Python import path the page documents, and add H3 headings for each symbol:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> my_package</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">### my_function</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">### MyClass</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Each H3 is replaced with the full signature, docstring, parameters, attributes, and a link to the source on GitHub — generated via <a href="https://mkdocstrings.github.io/griffe/">griffe</a>. Docstrings must be <a href="https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings">Google-style</a>. See <a href="./reference.html">Reference</a> for a more in-depth guide to creating reference docs.</p>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> Async Helpers</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="an">reference:</span><span class="co"> my_package.aio</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="fu">### run_async</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">### gather</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Each H3 is replaced with the full signature, docstring, parameters, attributes, and a link to the source on GitHub — generated via <a href="https://mkdocstrings.github.io/griffe/">griffe</a>. The <code>reference:</code> field is required (pages without it are ignored) and tells Inspect Docs which module’s symbols to look up. Docstrings must be <a href="https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings">Google-style</a>. See <a href="./reference.html">Reference</a> for a more in-depth guide.</p>
 </section>
 <section id="interlinks" class="level2">
 <h2 class="anchored" data-anchor-id="interlinks">Interlinks</h2>
@@ -395,14 +396,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Python import name. Auto-discovered from <code>pyproject.toml</code>; set explicitly only when the import name differs from the distribution name.</td>
 </tr>
 <tr class="odd">
+<td><code>cli</code></td>
+<td>CLI binary name (for Click command pages). Auto-discovered from <code>pyproject.toml</code>’s <code>[project.scripts]</code>; set explicitly when the binary name differs from the module name.</td>
+</tr>
+<tr class="even">
 <td><code>navigation</code></td>
 <td>Navbar and sidebar entries (see <a href="./articles.html">Articles</a>).</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>sidebar</code></td>
 <td>Show the sidebar. Defaults to <code>true</code> when <code>navigation</code> is set.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>external_refs</code></td>
 <td>Map of <code>package_name: docs_url</code> for cross-package interlinking (see <a href="./interlinks.html">Interlinks</a>).</td>
 </tr>
