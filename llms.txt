@@ -1,0 +1,23 @@
+# Inspect Docs
+
+> A Quarto project type extension for Python package documentation with automatic API reference generation.
+
+## Home
+
+- [Home](https://meridianlabs-ai.github.io/inspect-docs/index.html.md): A Quarto extension for Python package documentation with automatic API reference generation.
+
+## Articles
+
+- [Articles](https://meridianlabs-ai.github.io/inspect-docs/articles.html.md): Writing prose pages alongside your API reference—navigation, diagrams, and README handling.
+
+## Reference
+
+- [Reference](https://meridianlabs-ai.github.io/inspect-docs/reference.html.md): Generating API reference pages for your Python package and its Click CLI commands.
+
+## Interlinks
+
+- [Interlinks](https://meridianlabs-ai.github.io/inspect-docs/interlinks.html.md): Automatic cross-linking of inline code to reference pages—locally and across other inspect-docs sites.
+
+## llms.txt
+
+- [llms.txt](https://meridianlabs-ai.github.io/inspect-docs/llms.html.md): Making your docs LLM-friendly with auto-generated llms.txt and per-page Markdown sources.

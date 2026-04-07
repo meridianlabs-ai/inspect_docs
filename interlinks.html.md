@@ -1,0 +1,62 @@
+# Interlinks
+
+Interlinks turn inline code references like `` `MyClass` `` and `` `my_function()` `` into links to the right reference page automatically. Interlinks can also extend across projects: if you depend on another package that publishes an Inspect Docs site, references to its symbols are linked too.
+
+## Local References
+
+Inspect Docs scans the rendered content on every page for inline code spans and attempts to resolve each one as a symbol in your project’s reference index. Two heuristics drive the lookup:
+
+- A code span that starts with an uppercase letter (e.g. `` `MyClass` ``, `` `TaskResult` ``) is treated as a class or type reference.
+- A code span that ends with `()` (e.g. `` `my_function()` ``, `` `run_task()` ``) is treated as a function or method reference.
+
+If the lookup succeeds, the code span is rewritten as a link to the symbol’s reference page. If it fails, the code span is left as plain code.
+
+## External References
+
+You can link to API symbols documented in other Inspect Docs sites by declaring them under `external_refs` in `_quarto.yml`:
+
+``` yaml
+inspect-docs:
+  external_refs:
+    inspect_ai: https://inspect.aisi.org.uk
+    other_package: https://docs.example.com/other
+```
+
+### Resolution Scheme
+
+At render time the extension fetches `{url}/reference/refs.json` from each listed package and caches it locally in your `reference/` directory. Inline code references in your prose are then resolved against both the local project and the external packages, in order:
+
+1.  The local project first.
+2.  Each external package, in the order it’s listed under `external_refs`.
+
+The first match wins. Links point at the external site’s reference pages.
+
+### Forcing Packages
+
+If the same symbol name appears in more than one package—or if you want to unambiguously reference an external symbol even when a local one exists—use the `pkg::Symbol` syntax:
+
+``` markdown
+See `inspect_ai::Task` for the base class we extend.
+```
+
+This bypasses local resolution and looks up `Task` directly in the `inspect_ai` external package.
+
+### Opting Out
+
+To suppress interlinking on a specific code span—for example, when you’re showing an illustrative example, discussing a type-name collision, or mentioning a symbol that happens to match the naming heuristic but shouldn’t be a link—add the `.noref` class:
+
+``` markdown
+The string `MyClass`{.noref} is the expected value here.
+```
+
+The code span renders as plain code with no lookup attempted.
+
+## Publishing Refs
+
+Every site built with Inspect Docs is automatically a valid `external_refs` target — `reference/refs.json` is generated and published as part of every render. Other projects can point at your site’s URL and pick up your symbols:
+
+``` yaml
+inspect-docs:
+  external_refs:
+    your_package: https://docs.your-package.example.com
+```

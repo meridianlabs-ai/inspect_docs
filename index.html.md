@@ -1,0 +1,155 @@
+# Inspect Docs
+
+Inspect Docs helps you create documentation websites for Python packages using Quarto:
+
+- Author articles using all the features of standard Quarto markdown.
+- Generate API reference pages from your source code via [griffe](https://mkdocstrings.github.io/griffe/).
+- Automatically turn inline code references into links to documentation.
+- Generate an [llms.txt](https://llmstxt.org) and Markdown doc pages so LLMs can ingest your site.
+
+## Getting Started
+
+### Installation
+
+To create a new documentation site within a Python package:
+
+``` bash
+mkdir docs
+cd docs
+quarto use template meridianlabs-ai/inspect-docs
+```
+
+To take an existing doc site and update it to use `inspect-docs`:
+
+``` bash
+cd docs
+quarto add meridianlabs-ai/inspect-docs
+```
+
+To update to a more recent version of the extension:
+
+``` bash
+cd docs
+quarto update meridianlabs-ai/inspect-docs
+```
+
+### Configuration
+
+Edit `docs/_quarto.yml` to reference the project type and provide basic site configuration:
+
+``` yaml
+project:
+  type: meridianlabs-ai/inspect-docs
+
+inspect-docs:
+  title: "Package Title"
+  description: "Package Description"
+  url: https://example.com/mypackage
+  repo: myorg/mypackage
+  org: My Org
+```
+
+All `inspect-docs:` fields are optional; see [Options](#options) below for the full list.
+
+### Dependencies
+
+Inspect Docs requires Quarto 1.9.36 or later plus a handful of Python packages. Add them to your `dev` dependencies:
+
+``` toml
+[dependency-groups]
+dev = [
+    "ruff",
+    "pytest",
+    "pyright",
+    ...
+    {include-group = "doc"},
+]
+doc = [
+    "jupyter",
+    "panflute",
+    "markdown",
+    "griffe",
+    "pyyaml",
+    "types-PyYAML",
+    "quarto-cli>=1.9.36",
+]
+```
+
+Then install them:
+
+``` bash
+uv sync
+```
+
+### Preview
+
+By default, Inspect Docs will symlink to any `README.md` and `CHANGELOG.md` in the root of your repo and create a site based on their contents. Preview it with:
+
+``` bash
+cd docs
+quarto preview
+```
+
+## Articles
+
+Articles are `.qmd` files you list under `navigation` in `_quarto.yml`. A simple navigation block looks like this:
+
+``` yaml
+inspect-docs:
+  navigation:
+    - text: Getting Started
+      href: index.qmd
+    - text: Guides
+      contents:
+        - text: Installation
+          href: guides/install.qmd
+```
+
+Simple items become navbar links and sidebar entries. Items with `contents` become dropdowns and sidebar sections. See [Articles](articles.html.md) for additional documentation on authoring and navigation.
+
+## Reference
+
+Create a `.qmd` file in a `reference/` directory whose title matches your module, then add H3 headings for each symbol to document:
+
+``` markdown
+---
+title: my_package
+---
+
+### my_function
+### MyClass
+```
+
+Each H3 is replaced with the full signature, docstring, parameters, attributes, and a link to the source on GitHub — generated via [griffe](https://mkdocstrings.github.io/griffe/). Docstrings must be [Google-style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings). See [Reference](reference.html.md) for a more in-depth guide to creating reference docs.
+
+## Interlinks
+
+Inline code references to documented symbols are automatically linked to their reference pages on every page in the site:
+
+``` markdown
+See `MyClass` and `my_function()` for details.
+```
+
+`` `MyClass` `` (starts uppercase) links to the class’s reference page; `` `my_function()` `` (trailing `()`) links to the function’s reference page.
+
+When `external_refs` is configured, inline code also resolves against other Inspect Docs sites. See [Interlinks](interlinks.html.md) to learn more.
+
+## llms.txt
+
+Every site includes an auto-generated [`llms.txt`](https://llmstxt.org) at the root and per-page Markdown sources at `{page}.html.md`. A **Copy page** button in the page header lets readers grab the Markdown or open it in a new tab. See [llms.txt](llms.html.md) for details.
+
+## Options
+
+Options available under `inspect-docs:` in `_quarto.yml`:
+
+| Field | Description |
+|----|----|
+| `title` | Site title. Auto-extracted from the index page H1 if omitted. |
+| `description` | Site description. Used for OpenGraph/Twitter cards and the `llms.txt` header. |
+| `url` | Canonical site URL. Used when generating absolute links in `llms.txt`. |
+| `repo` | GitHub repo as `org/repo`. Enables the navbar GitHub icon and source links on reference pages. |
+| `org` | Organization name. Adds a left-side footer link. |
+| `module` | Python import name. Auto-discovered from `pyproject.toml`; set explicitly only when the import name differs from the distribution name. |
+| `navigation` | Navbar and sidebar entries (see [Articles](articles.html.md)). |
+| `sidebar` | Show the sidebar. Defaults to `true` when `navigation` is set. |
+| `external_refs` | Map of `package_name: docs_url` for cross-package interlinking (see [Interlinks](interlinks.html.md)). |
