@@ -1,0 +1,11 @@
+project:
+  type: meridianlabs-ai/inspect-docs
+
+inspect-docs:
+  title: "Package Title"
+  description: "Package Description"
+  url: https://example.com/mypackage
+  repo: myorg/mypackage
+  org: My Org
+
+
