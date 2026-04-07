@@ -4,6 +4,10 @@ A Quarto project type extension for Python package documentation with automatic 
 
 ## Setup
 
+```bash
+quarto add meridianlabs-ai/inspect_docs
+```
+
 Copy the `_extensions/meridianlabs-ai/inspect-docs` directory into your project's `docs/_extensions/meridianlabs-ai/inspect-docs/`.
 
 Install the required Python packages (typically in a `doc` dependency group):
