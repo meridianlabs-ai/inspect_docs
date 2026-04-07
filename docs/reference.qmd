@@ -5,65 +5,55 @@ llms-description: Generating API reference pages for your Python package and its
 
 Reference pages document your package's public API. Place `.qmd` files in a `reference/` directory and Inspect Docs auto-discovers them, builds a reference sidebar, and generates a cross-reference index. H3 headings on each page are replaced with full API documentation generated from your Python source.
 
-Reference pages follow these filename patterns:
-
-| Pattern                    | Type                 | Example               |
-|----------------------------|----------------------|-----------------------|
-| `<module>.qmd`             | API (main module)    | `my_package.qmd`      |
-| `<module>.<sub>.qmd`       | API (submodule)      | `my_package.utils.qmd`|
-| `<module>_<command>.qmd`   | CLI command          | `my_package_run.qmd`  |
+Every reference page must declare its binding via a frontmatter `reference:` field — the Python import path (for API pages) or CLI command path (for CLI pages) that the page documents. Pages without a `reference:` field are ignored. Filenames are not used for matching, so you can name the files however you like.
 
 ## Python API
 
-### Module Pages
-
-Create a `.qmd` file whose `title` matches your module name. Use H2 headings for organizational sections (they render as-is) and H3 headings for each symbol to document:
+A reference page documents a single module. Set `reference:` to that module's import path, then add H2 headings for organizational sections (rendered as-is) and H3 headings for each symbol:
 
 ```markdown
 ---
-title: my_package
-description: Core tasks and utilities.
+title: Async Helpers
+reference: my_package.aio
 ---
 
-## Tasks
+## Coroutines
 
-### my_function
-### MyClass
+### run_async
+### gather
 
 ## Utilities
 
-### helper_function
+### shield
 ```
 
-Each H3 heading is replaced with the full function or class documentation: signature, docstring, parameters, attributes, methods, and a "source" link pointing at your repo on GitHub. The H2 headings remain as section separators in the rendered sidebar.
+The H3 headings above resolve to `my_package.aio.run_async`, `my_package.aio.gather`, and `my_package.aio.shield`. Each is replaced with the full function or class documentation: signature, docstring, parameters, attributes, methods, and a "source" link pointing at your repo on GitHub.
 
-### Submodule Pages
-
-For submodules, use a dotted title:
+A page documenting the project's main module sets `reference:` to that module name:
 
 ```markdown
 ---
-title: my_package.utils
-description: Helper functions for working with tasks.
+title: Scanner API
+reference: my_package
 ---
 
-### format_output
-### parse_input
+### Scanner
+### scanner_decorator
 ```
 
-The symbol names under a submodule page are resolved relative to that submodule — so `format_output` above becomes `my_package.utils.format_output`.
+The H3 headings here resolve to `my_package.Scanner` and `my_package.scanner_decorator`.
 
-### Doc Generation
+### Title defaulting
 
-For each documented symbol, the following is extracted and rendered:
+Page title precedence:
 
-- The full signature (including type annotations and defaults).
-- The docstring summary and extended description.
-- Parameters, with types and per-parameter descriptions.
-- For classes: attributes, methods, and inherited members.
-- A "source" link back to the exact file and line in your repo (built from the `repo` field in `_quarto.yml`).
+1. Frontmatter `title:` if present.
+2. Else, the value of `reference:` (which is convenient for single-module pages — `reference: my_package.utils` becomes the displayed title with no extra typing).
+3. Else, Quarto's normal title behavior (first H1 / filename).
 
-Docstrings must be written in [Google style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings). For example:
+### Docstring conventions
+
+Docstrings must be written in [Google style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings):
 
 ```python
 def run_task(name: str, *, timeout: float = 30.0) -> TaskResult:
@@ -81,37 +71,44 @@ def run_task(name: str, *, timeout: float = 30.0) -> TaskResult:
     """
 ```
 
-If a symbol has no docstring, `inspect-docs` emits a warning during the render and skips that entry.
+If a symbol has no docstring, Inspect Docs emits a warning during the render and skips that entry.
 
 ## CLI Commands
 
-For packages that expose a [Click](https://click.palletsprojects.com/) CLI, reference pages for individual commands use the filename convention `<module>_<command>.qmd`:
+For packages that expose a [Click](https://click.palletsprojects.com/) CLI, reference pages bind to a command via the same `reference:` field:
 
 ```markdown
 ---
-title: my_package run
-description: Run a task.
+reference: my_package run
 ---
 ```
 
-Given the filename `my_package_run.qmd`, `inspect-docs` loads the Click command from `my_package._cli.run` (attribute `run`) and populates the page with usage, description, options, and subcommands. No body content is needed — the frontmatter is enough.
+The page displays as `my_package run` (title defaulted from `reference:`) and is populated with usage, description, options, and subcommands derived from the Click command at `my_package._cli.run`.
+
+A page is treated as a CLI command page when its `reference:` value starts with `<cli> ` (binary name + space) or equals `<cli>` exactly. Otherwise it's an API page.
+
+### CLI binary name
+
+Inspect Docs needs to know your CLI binary name to recognize CLI pages. By default it's auto-discovered from `pyproject.toml`'s `[project.scripts]` table — preferring an entry whose value references `{module}._cli`. If that doesn't pick the right one, set it explicitly in `_quarto.yml`:
+
+```yaml
+inspect-docs:
+  module: my_package
+  cli: my-binary    # only needed if it differs from the module name
+```
+
+The CLI binary name is independent of the Python module name. For example, a package named `inspect_scout` whose `pyproject.toml` exposes a `scout` script would set (or auto-discover) `cli: scout`, and CLI pages would use `reference: scout <command>`.
 
 ## Inline Reference
 
-You can embed API reference documentation on any page by using the `reference` attribute on a heading.
-
-First, add a `reference` field to the page's frontmatter pointing at the module the symbols live in:
+You can embed API reference documentation on any article page (i.e. outside `reference/`) by using the `reference` attribute on a heading:
 
 ```markdown
 ---
 title: Getting Started
 reference: my_package
 ---
-```
 
-Then use the `reference` attribute on any heading:
-
-```markdown
 ## Key functions
 
 ### My Function {reference="my_function"}
@@ -121,7 +118,7 @@ Some additional context about this function…
 ### My Class {reference="MyClass"}
 ```
 
-The heading content becomes the display title while the `reference` attribute specifies which Python object to document. Prose between H3s is preserved as-is.
+The page-level `reference:` field declares the binding (same field as on reference pages). On article pages outside `reference/`, only headings with an explicit `{reference="..."}` attribute become symbols; plain H3s remain plain headings.
 
 ## Reference Index
 
