@@ -1,20 +1,18 @@
 ---
-title: LLMs
-description: Making your docs LLM-friendly with auto-generated llms.txt and per-page Markdown sources.
+title: llms.txt
+llms-description: Making your docs LLM-friendly with auto-generated llms.txt and per-page Markdown sources.
 ---
 
-`inspect-docs` makes your documentation LLM-friendly out of the box. Every render produces an [`llms.txt`](https://llmstxt.org) index at the root of your site and a plain-Markdown source for every rendered page, giving language models a structured entry point and clean raw content to work with.
+## Index Page
 
-## llms.txt
+Inspect Docs produces an [`llms.txt`](https://llmstxt.org) index page at the root of your site and a plain-Markdown source for every rendered page, giving language models a structured entry point and clean raw markdown content to work with.
 
-An [`llms.txt`](https://llmstxt.org) file is automatically generated at the root of your rendered site, following the [llmstxt.org](https://llmstxt.org) spec. It's built from your site's `title`, `description`, `navigation`, and reference pages — no configuration required.
-
-The generated file looks roughly like this:
+The file is is built from your site's `title`, `description`, `navigation`, and reference pages, and looks roughly like this:
 
 ```markdown
 # My Package
 
-> A one-line description of what the package does.
+> Description of what the package does.
 
 ## Docs
 
@@ -31,11 +29,9 @@ The generated file looks roughly like this:
 - [my_package run](https://docs.example.com/reference/my_package_run.html): Run a task.
 ```
 
-### Page descriptions
+### Descriptions
 
 Each entry in `llms.txt` uses the page's frontmatter `description` field as its summary. Writing a short `description` on every article and reference page is the single most impactful thing you can do to make `llms.txt` useful — both for LLMs and for the auto-generated reference index that uses the same field.
-
-### Overriding with `llms-description`
 
 Sometimes the summary you want to show *on* a page is different from the summary you want to expose to LLMs. The page description might be marketing-flavored ("Get up and running in five minutes!") while the LLM description should be more literal ("Installation, first render, and project layout").
 
@@ -51,21 +47,14 @@ llms-description: Installation, first render, and project layout.
 
 If `llms-description` is absent, `description` is used. If both are absent, the page appears in `llms.txt` with an empty summary.
 
-## Per-page Markdown sources
+## Markdown Pages
 
-In addition to the HTML version of each page, `inspect-docs` publishes a plain-Markdown version at the same URL with `.html.md` appended. So a page rendered at `https://docs.example.com/guides/install.html` is also available at `https://docs.example.com/guides/install.html.md` as raw Markdown.
+In addition to the HTML version of each page, Inspect Docs publishes a plain-Markdown version at the same URL with `.html.md` appended. 
 
-This is useful for:
+So a page rendered at `https://docs.example.com/guides/install.html` is also available at `https://docs.example.com/guides/install.html.md` as raw Markdown.
 
-- Linking an LLM directly at a single page without asking it to parse HTML.
-- Tooling that wants the Markdown source for indexing, diffing, or transformation.
-- Users who want to grab the source of a page to adapt it into their own notes.
+Inspect Docs also injects a **Copy page** button into every page header. The button lets readers:
 
-## Copy page
-
-To make the Markdown sources easy to discover, `inspect-docs` injects a **Copy page** button into every page header. The button lets readers:
-
-- **Copy as Markdown** — copy the current page's Markdown source straight to the clipboard.
+- **Copy as Markdown** — copy the page's Markdown source to the clipboard.
 - **Open as Markdown** — open the `.html.md` version in a new tab.
 
-The intended use case is pasting a doc page into a chat with an LLM: one click, no manual cleanup, no HTML-to-Markdown conversion required. Readers who already have an LLM workflow can use it; readers who don't never see anything unusual — the button is just a small icon that doesn't get in the way of the normal reading experience.

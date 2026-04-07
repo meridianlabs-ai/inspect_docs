@@ -1,15 +1,23 @@
 ---
 title: Reference
-description: Generating API reference pages for your Python package and its Click CLI commands.
+lms-description: Generating API reference pages for your Python package and its Click CLI commands.
 ---
 
-Reference pages document your package's public API. Place `.qmd` files in a `reference/` directory and `inspect-docs` auto-discovers them, builds a reference sidebar, and generates a cross-reference index. H3 headings on each page are replaced with full API documentation generated from your Python source via [griffe](https://mkdocstrings.github.io/griffe/).
+Reference pages document your package's public API. Place `.qmd` files in a `reference/` directory and Inspect Docs auto-discovers them, builds a reference sidebar, and generates a cross-reference index. H3 headings on each page are replaced with full API documentation generated from your Python source.
+
+Reference pages follow these filename patterns:
+
+| Pattern                    | Type                 | Example               |
+|----------------------------|----------------------|-----------------------|
+| `<module>.qmd`             | API (main module)    | `my_package.qmd`      |
+| `<module>.<sub>.qmd`       | API (submodule)      | `my_package.utils.qmd`|
+| `<module>_<command>.qmd`   | CLI command          | `my_package_run.qmd`  |
 
 ## Python API
 
 ### Module pages
 
-Create a `.qmd` file whose title matches your module name. Use H2 headings for organizational sections (they render as-is) and H3 headings for each symbol to document:
+Create a `.qmd` file whose `title` matches your module name. Use H2 headings for organizational sections (they render as-is) and H3 headings for each symbol to document:
 
 ```markdown
 ---
@@ -45,9 +53,9 @@ description: Helper functions for working with tasks.
 
 The symbol names under a submodule page are resolved relative to that submodule — so `format_output` above becomes `my_package.utils.format_output`.
 
-### What griffe generates
+### Doc Generation
 
-For each documented symbol, griffe extracts and renders:
+For each documented symbol, the following is extracted and rendered:
 
 - The full signature (including type annotations and defaults).
 - The docstring summary and extended description.
@@ -75,7 +83,7 @@ def run_task(name: str, *, timeout: float = 30.0) -> TaskResult:
 
 If a symbol has no docstring, `inspect-docs` emits a warning during the render and skips that entry.
 
-## CLI commands
+## CLI Commands
 
 For packages that expose a [Click](https://click.palletsprojects.com/) CLI, reference pages for individual commands use the filename convention `<module>_<command>.qmd`:
 
@@ -88,7 +96,7 @@ description: Run a task.
 
 Given the filename `my_package_run.qmd`, `inspect-docs` loads the Click command from `my_package._cli.run` (attribute `run`) and populates the page with usage, description, options, and subcommands. No body content is needed — the frontmatter is enough.
 
-## Inline reference
+## Inline Reference
 
 You can embed API reference documentation on *any* page (not just reference pages) by using the `reference` attribute on a heading. This is useful for guides that walk through a few key functions as part of a narrative.
 
@@ -115,16 +123,6 @@ Some additional context about this function…
 
 The heading content becomes the display title while the `reference` attribute specifies which Python object to document. The rest of the heading's section — including any prose you write between H3s — is preserved as-is.
 
-## Filename conventions
-
-Reference pages follow these filename patterns:
-
-| Pattern                    | Type                 | Example               |
-|----------------------------|----------------------|-----------------------|
-| `<module>.qmd`             | API (main module)    | `my_package.qmd`      |
-| `<module>.<sub>.qmd`       | API (submodule)      | `my_package.utils.qmd`|
-| `<module>_<command>.qmd`   | CLI command          | `my_package_run.qmd`  |
-
-## The reference index
+## Reference index
 
 A `reference/index.qmd` is automatically generated from the discovered reference pages. It groups API pages and CLI command pages into separate tables, each row showing the page title and its `description` field. You don't need to create or maintain this file — just ensure every reference page has a short `description` in its frontmatter so the index reads nicely.

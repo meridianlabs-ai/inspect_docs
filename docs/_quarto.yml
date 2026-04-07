@@ -16,5 +16,5 @@ inspect-docs:
       href: reference.qmd
     - text: Interlinks
       href: interlinks.qmd
-    - text: LLMs
+    - text: llms.txt
       href: llms.qmd

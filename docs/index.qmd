@@ -1,14 +1,14 @@
 ---
 title: Inspect Docs
-description: A Quarto extension for Python package documentation with automatic API reference generation.
+llms-description: A Quarto extension for Python package documentation with automatic API reference generation.
 ---
 
-`inspect-docs` automatically creates documentation websites for Python packages with minimal configuration. From a single `_quarto.yml` and a handful of `.qmd` files you get:
+Inspect Docs helps you create documentation websites for Python packages using Quarto:
 
-- A navbar + sidebar site built on Quarto, with sensible defaults.
-- Automatically generated API reference pages from your source code (via [griffe](https://mkdocstrings.github.io/griffe/)) and Click CLI commands.
-- Interlinks that automatically turn inline ``` `MyClass` ``` and ``` `my_function()` ``` into links to the right reference page — locally *or* across other `inspect-docs` sites you depend on.
-- An auto-generated [`llms.txt`](https://llmstxt.org) and per-page Markdown source so LLMs can ingest your docs.
+- Author articles using all the features of standard Quarto markdown.
+- Generate API reference pages from your source code via [griffe](https://mkdocstrings.github.io/griffe/).
+- Automatically turn inline code referenes (e.g. ``` `my_function()` ```) into links to the right reference page.
+- Generate an [llms.txt](https://llmstxt.org) and Markdown doc pages so LLMs can ingest your site.
 
 
 ## Getting Started
@@ -53,11 +53,11 @@ inspect-docs:
   org: My Org
 ```
 
-All `inspect-docs:` fields are optional; see [Project configuration](#project-configuration) below for the full list.
+All `inspect-docs:` fields are optional; see [Options](#options) below for the full list.
 
 ### Dependencies
 
-`inspect-docs` requires Quarto 1.9.36 or later plus a handful of Python packages. Add them to your `dev` dependencies:
+Inspect Docs requires Quarto 1.9.36 or later plus a handful of Python packages. Add them to your `dev` dependencies:
 
 ```toml
 [dependency-groups]
@@ -87,14 +87,14 @@ uv sync
 
 ### First render
 
-By default, `inspect-docs` will symlink to any `README.md` and `CHANGELOG.md` in the root of your repo and create a site based on their contents. Preview it with:
+By default, Inspect Docs will symlink to any `README.md` and `CHANGELOG.md` in the root of your repo and create a site based on their contents. Preview it with:
 
 ```bash
 cd docs
 quarto preview
 ```
 
-## Writing articles
+## Articles
 
 Articles are `.qmd` files you list under `navigation` in `_quarto.yml`. A simple navigation block looks like this:
 
@@ -111,7 +111,7 @@ inspect-docs:
 
 Simple items become navbar links and sidebar entries. Items with `contents` become dropdowns and sidebar sections. See [Articles](articles.qmd) for additional documentation on authoring and navigation.
 
-## Reference documentation
+## Reference
 
 Create a `.qmd` file in a `reference/` directory whose title matches your module, then add H3 headings for each symbol to document:
 
@@ -134,13 +134,17 @@ Inline code references to documented symbols are automatically linked to their r
 See `MyClass` and `my_function()` for details.
 ```
 
-`` `MyClass` `` (starts uppercase) links to the class's reference page; `` `my_function()` `` (trailing `()`) links to the function's reference page. When `external_refs` is configured, inline code also resolves against other `inspect-docs` sites — and any site built with this extension is automatically a valid cross-link target for others. See [Interlinks](interlinks.qmd) to learn more.
+`` `MyClass` `` (starts uppercase) links to the class's reference page; `` `my_function()` `` (trailing `()`) links to the function's reference page.
 
-## LLMs
+When `external_refs` is configured, inline code also resolves against other Inspect Docs sites — and any site built with this extension is automatically a valid cross-link target for others. See [Interlinks](interlinks.qmd) to learn more.
 
-Every site ships with an auto-generated [`llms.txt`](https://llmstxt.org) at the root and per-page Markdown sources (served at `{page}.html.md`), so LLMs can ingest your docs directly. A **Copy page** button in the page header lets readers grab the Markdown or open it in a new tab — handy for pasting into a chat. See [LLMs](llms.qmd) for full details including how to customize page descriptions for the main index.
+## llms.txt
 
-## Project Config
+Every site ships with an auto-generated [`llms.txt`](https://llmstxt.org) at the root and per-page Markdown sources (served at `{page}.html.md`), so LLMs can ingest your docs directly. 
+
+A **Copy page** button in the page header lets readers grab the Markdown or open it in a new tab — handy for pasting into a chat. See [llms.txt](llms.qmd) for full details including how to customize page descriptions for the main index.
+
+## Options
 
 Options available under `inspect-docs:` in `_quarto.yml`:
 
