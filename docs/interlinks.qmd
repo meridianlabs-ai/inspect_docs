@@ -1,0 +1,78 @@
+---
+title: Interlinks
+description: Automatic cross-linking of inline code to reference pages — locally and across other inspect-docs sites.
+---
+
+Interlinks turn inline code references like `` `MyClass` `` and `` `my_function()` `` into links to the right reference page automatically. They work on every page in the site — not just reference pages — and they extend across projects: if you depend on another package that publishes an `inspect-docs` site, references to its symbols are linked too.
+
+## How local interlinks work
+
+`inspect-docs` scans the rendered prose on every page for inline code spans and attempts to resolve each one as a symbol in your project's reference index. Two heuristics drive the lookup:
+
+- A code span that **starts with an uppercase letter** (e.g. `` `MyClass` ``, `` `TaskResult` ``) is treated as a class or type reference.
+- A code span that **ends with `()`** (e.g. `` `my_function()` ``, `` `run_task()` ``) is treated as a function or method reference.
+
+If the lookup succeeds, the code span is rewritten as a link to the symbol's reference page. If it fails, the code span is left as plain code — no warning, no error. This means you can freely write prose that mentions symbols without worrying about whether they're documented yet; the links will appear as soon as the corresponding reference pages exist.
+
+## External references
+
+You can link to API symbols documented in *other* `inspect-docs` sites by declaring them under `external_refs` in `_quarto.yml`:
+
+```yaml
+inspect-docs:
+  external_refs:
+    inspect_ai: https://inspect.aisi.org.uk
+    other_package: https://docs.example.com/other
+```
+
+### How resolution works
+
+At render time the extension fetches `{url}/reference/refs.json` from each listed package and caches it locally in your `reference/` directory. Inline code references in your prose are then resolved against both the local project and the external packages, in order:
+
+1. The local project first.
+2. Each external package, in the order it's listed under `external_refs`.
+
+The first match wins. Links point at the external site's reference pages, so readers can move seamlessly between projects without you having to maintain any cross-project tables or indexes.
+
+### Forcing a specific package
+
+If the same symbol name appears in more than one package — or if you want to unambiguously reference an external symbol even when a local one exists — use the `pkg::Symbol` syntax:
+
+```markdown
+See `inspect_ai::Task` for the base class we extend.
+```
+
+This bypasses local resolution and looks up `Task` directly in the `inspect_ai` external package.
+
+### Opting out
+
+To suppress interlinking on a specific code span — for example, when you're showing an illustrative example, discussing a type-name collision, or mentioning a symbol that happens to match the naming heuristic but shouldn't be a link — add the `.noref` class:
+
+```markdown
+The string `MyClass`{.noref} is the expected value here.
+```
+
+The code span renders as plain code with no lookup attempted. This only affects the annotated span; other references on the same page continue to resolve normally.
+
+### Failure modes
+
+If a fetch fails — the site is down, the URL is wrong, the network is unavailable — the build **does not fail**:
+
+- If a previously-cached copy of the external package's `refs.json` exists, it's reused silently.
+- Otherwise a warning is printed and the build continues without that package's links. Inline references to its symbols simply render as plain code.
+
+This means you can declare external references freely without worrying about making your CI build dependent on other projects' uptime.
+
+## Publishing your own refs
+
+Every site built with `inspect-docs` is automatically a valid `external_refs` target. When you render your site, `inspect-docs` generates `reference/refs.json` as part of the normal build and publishes it alongside the rest of the site — no opt-in, no extra configuration, no separate step.
+
+Other projects can point at your site's URL and immediately pick up your symbols:
+
+```yaml
+inspect-docs:
+  external_refs:
+    your_package: https://docs.your-package.example.com
+```
+
+The more Python packages that document themselves with `inspect-docs`, the more valuable cross-linking becomes for everyone: each new site automatically enriches every other site that depends on it, without any coordination between maintainers.
