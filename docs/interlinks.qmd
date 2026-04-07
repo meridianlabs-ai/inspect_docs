@@ -32,7 +32,7 @@ At render time the extension fetches `{url}/reference/refs.json` from each liste
 1. The local project first.
 2. Each external package, in the order it's listed under `external_refs`.
 
-The first match wins. Links point at the external site's reference pages, so readers can move seamlessly between projects without you having to maintain any cross-project tables or indexes.
+The first match wins. Links point at the external site's reference pages.
 
 ### Forcing Packages
 
@@ -52,13 +52,11 @@ To suppress interlinking on a specific code span—for example, when you're show
 The string `MyClass`{.noref} is the expected value here.
 ```
 
-The code span renders as plain code with no lookup attempted. This only affects the annotated span; other references on the same page continue to resolve normally.
+The code span renders as plain code with no lookup attempted.
 
 ## Publishing Refs
 
-Every site built with Inspect Docs is automatically a valid `external_refs` target. When you render your site, Inspect Docs generates `reference/refs.json` as part of the normal build and publishes it alongside the rest of the site.
-
-Other projects can point at your site's URL and pick up your symbols:
+Every site built with Inspect Docs is automatically a valid `external_refs` target — `reference/refs.json` is generated and published as part of every render. Other projects can point at your site's URL and pick up your symbols:
 
 ```yaml
 inspect-docs:

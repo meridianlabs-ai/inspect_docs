@@ -98,7 +98,7 @@ Given the filename `my_package_run.qmd`, `inspect-docs` loads the Click command 
 
 ## Inline Reference
 
-You can embed API reference documentation on *any* page (not just reference pages) by using the `reference` attribute on a heading. This is useful for guides that walk through a few key functions as part of a narrative.
+You can embed API reference documentation on any page by using the `reference` attribute on a heading.
 
 First, add a `reference` field to the page's frontmatter pointing at the module the symbols live in:
 
@@ -121,8 +121,8 @@ Some additional context about this function…
 ### My Class {reference="MyClass"}
 ```
 
-The heading content becomes the display title while the `reference` attribute specifies which Python object to document. The rest of the heading's section — including any prose you write between H3s — is preserved as-is.
+The heading content becomes the display title while the `reference` attribute specifies which Python object to document. Prose between H3s is preserved as-is.
 
 ## Reference Index
 
-A `reference/index.qmd` is automatically generated from the discovered reference pages. It groups API pages and CLI command pages into separate tables, each row showing the page title and its `description` field. You don't need to create or maintain this file — just ensure every reference page has a short `description` in its frontmatter so the index reads nicely.
+A `reference/index.qmd` is automatically generated from the discovered reference pages. It groups API pages and CLI command pages into separate tables, each row showing the page title and its `description` field.

@@ -136,13 +136,11 @@ See `MyClass` and `my_function()` for details.
 
 `` `MyClass` `` (starts uppercase) links to the class's reference page; `` `my_function()` `` (trailing `()`) links to the function's reference page.
 
-When `external_refs` is configured, inline code also resolves against other Inspect Docs sites — and any site built with this extension is automatically a valid cross-link target for others. See [Interlinks](interlinks.qmd) to learn more.
+When `external_refs` is configured, inline code also resolves against other Inspect Docs sites. See [Interlinks](interlinks.qmd) to learn more.
 
 ## llms.txt
 
-Every site ships with an auto-generated [`llms.txt`](https://llmstxt.org) at the root and per-page Markdown sources (served at `{page}.html.md`), so LLMs can ingest your docs directly. 
-
-A **Copy page** button in the page header lets readers grab the Markdown or open it in a new tab — handy for pasting into a chat. See [llms.txt](llms.qmd) for full details including how to customize page descriptions for the main index.
+Every site includes an auto-generated [`llms.txt`](https://llmstxt.org) at the root and per-page Markdown sources at `{page}.html.md`. A **Copy page** button in the page header lets readers grab the Markdown or open it in a new tab. See [llms.txt](llms.qmd) for details.
 
 ## Options
 

@@ -22,7 +22,7 @@ description: Install the package and render your first site.
 Welcome!
 ```
 
-The `description` field is used in the auto-generated reference index, in OpenGraph/Twitter cards, and as the page's entry in `llms.txt`—it's worth writing a one-line summary for every article.
+The `description` field is used in the auto-generated reference index, in OpenGraph/Twitter cards, and as the page's entry in `llms.txt`.
 
 ## Navigation
 
@@ -73,9 +73,9 @@ You don't need to list either of these in `navigation`.
 
 ## Diagrams
 
-Quarto already has support for [Mermaid](https://quarto.org/docs/authoring/diagrams.html#mermaid) and [Graphviz](https://quarto.org/docs/authoring/diagrams.html#graphviz) diagrams—both are good choices for flowcharts, sequence diagrams, and other graph-style visuals written in code. See [Quarto's diagram documentation](https://quarto.org/docs/authoring/diagrams.html) for the full set of options.
+Quarto has built-in support for [Mermaid](https://quarto.org/docs/authoring/diagrams.html#mermaid) and [Graphviz](https://quarto.org/docs/authoring/diagrams.html#graphviz) diagrams — see [Quarto's diagram documentation](https://quarto.org/docs/authoring/diagrams.html).
 
-In addition to these, Inspect Docs adds support for [Excalidraw](https://excalidraw.com)—useful when you want something hand-drawn or freeform rather than code-generated. You embed an Excalidraw diagram by referencing a `.excalidraw` file as an image; the extension converts it to SVG at build time (Node.js dependencies are installed on first use and results are cached):
+Inspect Docs adds support for [Excalidraw](https://excalidraw.com). Embed an `.excalidraw` file as an image and the extension converts it to SVG at build time (Node.js dependencies are installed on first use; results are cached):
 
 ```markdown
 ![Architecture](diagrams/architecture.excalidraw)
