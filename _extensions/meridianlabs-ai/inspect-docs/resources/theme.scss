@@ -160,6 +160,15 @@ table {
     color: var(--quarto-hl-fu-color);
 }
 
+// Diff code block highlighting (GitHub-style green/red).
+.sourceCode .va {
+    color: #22863a; // additions (+)
+}
+
+.sourceCode .st {
+    color: #b31d28; // deletions (-)
+}
+
 .quarto-title {
     display: flex;
     align-items: baseline;
