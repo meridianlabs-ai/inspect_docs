@@ -184,6 +184,56 @@ def ensure_excalidraw_deps() -> None:
     )
 
 
+def _build_footer(
+    opts: YamlDict,
+    repo: str,
+    repo_url: str,
+    title: str,
+    org_name: str,
+) -> YamlDict:
+    """Build the website.page-footer block.
+
+    Center links: Code, Changelog, License, Issues (all pointing at GitHub).
+    Left:         optional org name with `org_url` override (falls back to
+                  `https://github.com/{org}`).
+    Right:        optional Twitter icon (from `twitter:` config) + GitHub icon.
+    """
+    footer: YamlDict = {
+        "center": [
+            {"text": "Code", "href": repo_url},
+            {"text": "Changelog", "href": f"{repo_url}/blob/main/CHANGELOG.md"},
+            {"text": "License", "href": f"{repo_url}/blob/main/LICENSE"},
+            {"text": "Issues", "href": f"{repo_url}/issues"},
+        ],
+    }
+
+    if org_name:
+        org = repo.split("/")[0]
+        org_link_url: str = opts.get("org_url") or f"https://github.com/{org}"
+        footer["left"] = [{"text": org_name, "href": org_link_url}]
+
+    right: list[YamlDict] = []
+    twitter: str = opts.get("twitter", "")
+    if twitter:
+        right.append(
+            {
+                "icon": "twitter",
+                "href": f"https://x.com/{twitter}",
+                "aria-label": f"{title or org_name} Twitter",
+            }
+        )
+    right.append(
+        {
+            "icon": "github",
+            "href": repo_url,
+            "aria-label": f"{title} on GitHub",
+        }
+    )
+    footer["right"] = right
+
+    return footer
+
+
 def _build_navbar(
     opts: YamlDict, repo_url: str, title: str, user_navbar: YamlDict
 ) -> YamlDict:
@@ -227,19 +277,7 @@ def generate_website_metadata(
             "site-url": site_url,
             "repo-url": repo_url,
             "navbar": _build_navbar(opts, repo_url, title, user_navbar),
-            "page-footer": {
-                "center": [
-                    {"text": "License", "href": f"{repo_url}/blob/main/LICENSE"},
-                    {"text": "Issues", "href": f"{repo_url}/issues"},
-                ],
-                "right": [
-                    {
-                        "icon": "github",
-                        "href": repo_url,
-                        "aria-label": f"{title} on GitHub",
-                    }
-                ],
-            },
+            "page-footer": _build_footer(opts, repo, repo_url, title, org_name),
         }
     }
 
@@ -254,11 +292,6 @@ def generate_website_metadata(
             card["image"] = site_image
         generated["website"]["twitter-card"] = dict(card)
         generated["website"]["open-graph"] = dict(card)
-
-    if org_name:
-        generated["website"]["page-footer"]["left"] = [
-            {"text": org_name, "href": f"https://github.com/{org}"}
-        ]
 
     favicon: str = opts.get("favicon", "")
     if favicon:
