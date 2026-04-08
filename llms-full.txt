@@ -73,7 +73,7 @@ doc = [
     "jupyter",
     "panflute",
     "markdown",
-    "griffe",
+    "griffe>=2",
     "pyyaml",
     "types-PyYAML",
     "quarto-cli>=1.9.36",
@@ -158,6 +158,8 @@ Options available under `inspect-docs:` in `_quarto.yml`:
 | `url` | Canonical site URL. Used when generating absolute links in `llms.txt`. |
 | `repo` | GitHub repo as `org/repo`. Enables the navbar GitHub icon and source links on reference pages. |
 | `org` | Organization name. Adds a left-side footer link. |
+| `org_url` | Custom URL for the org footer link. Defaults to `https://github.com/{org}`. |
+| `twitter` | Twitter/X handle (without `@`). Adds a Twitter icon to the footer right. |
 | `module` | Python import name. Auto-discovered from `pyproject.toml`; set explicitly only when the import name differs from the distribution name. |
 | `cli` | CLI binary name (for Click command pages). Auto-discovered from `pyproject.toml`’s `[project.scripts]`; set explicitly when the binary name differs from the module name. |
 | `navigation` | Navbar and sidebar entries (see [Articles](articles.html.md)). |

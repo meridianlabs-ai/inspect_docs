@@ -318,7 +318,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"jupyter"</span><span class="op">,</span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"panflute"</span><span class="op">,</span></span>
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"markdown"</span><span class="op">,</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"griffe"</span><span class="op">,</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"griffe&gt;=2"</span><span class="op">,</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"pyyaml"</span><span class="op">,</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"types-PyYAML"</span><span class="op">,</span></span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"quarto-cli&gt;=1.9.36"</span><span class="op">,</span></span>
@@ -411,6 +411,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="even">
 <td><code>org</code></td>
 <td>Organization name. Adds a left-side footer link.</td>
+</tr>
+<tr class="odd">
+<td><code>org_url</code></td>
+<td>Custom URL for the org footer link. Defaults to <code>https://github.com/{org}</code>.</td>
+</tr>
+<tr class="even">
+<td><code>twitter</code></td>
+<td>Twitter/X handle (without <code>@</code>). Adds a Twitter icon to the footer right.</td>
 </tr>
 <tr class="odd">
 <td><code>module</code></td>
@@ -976,6 +984,16 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="nav-footer-center">
       <ul class="footer-items list-unstyled">
     <li class="nav-item">
+    <a class="nav-link" href="https://github.com/meridianlabs-ai/inspect-docs">
+<p>Code</p>
+</a>
+  </li>  
+    <li class="nav-item">
+    <a class="nav-link" href="https://github.com/meridianlabs-ai/inspect-docs/blob/main/CHANGELOG.md">
+<p>Changelog</p>
+</a>
+  </li>  
+    <li class="nav-item">
     <a class="nav-link" href="https://github.com/meridianlabs-ai/inspect-docs/blob/main/LICENSE">
 <p>License</p>
 </a>
@@ -990,7 +1008,7 @@ document.addEventListener("DOMContentLoaded", function () {
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
     <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/meridianlabs-ai/inspect-docs">
+    <a class="nav-link" href="https://github.com/meridianlabs-ai/inspect-docs/">
       <i class="bi bi-github" role="img" aria-label="Inspect Docs on GitHub">
 </i> 
     </a>
