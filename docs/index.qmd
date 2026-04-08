@@ -152,6 +152,8 @@ Options available under `inspect-docs:` in `_quarto.yml`:
 | `title`         | Site title. Auto-extracted from the index page H1 if omitted.                                |
 | `description`   | Site description. Used for OpenGraph/Twitter cards and the `llms.txt` header.                |
 | `image`         | Social card image (path or URL) embedded in OpenGraph/Twitter card metadata.                 |
+| `logo`          | Navbar logo image (path or URL).                                                              |
+| `favicon`       | Site favicon (path or URL).                                                                   |
 | `url`           | Canonical site URL. Used when generating absolute links in `llms.txt`.                       |
 | `repo`          | GitHub repo as `org/repo`. Enables the navbar GitHub icon and source links on reference pages. |
 | `org`           | Organization name. Adds a left-side footer link.                                             |
