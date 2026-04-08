@@ -193,6 +193,9 @@ def _build_navbar(
         "background": "light",
         "search": True,
     }
+    logo: str = opts.get("logo", "")
+    if logo and "logo" not in user_navbar:
+        navbar["logo"] = logo
     if "left" not in user_navbar:
         navbar["left"] = nav_to_navbar(opts.get("navigation", []))
     if "right" not in user_navbar:
@@ -256,6 +259,10 @@ def generate_website_metadata(
         generated["website"]["page-footer"]["left"] = [
             {"text": org_name, "href": f"https://github.com/{org}"}
         ]
+
+    favicon: str = opts.get("favicon", "")
+    if favicon:
+        generated["website"]["favicon"] = favicon
 
     # add Reference navbar link if reference docs exist (only when we
     # generated the left navbar; if the user provided their own left,
