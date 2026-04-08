@@ -147,6 +147,9 @@ Options available under `inspect-docs:` in `_quarto.yml`:
 |----|----|
 | `title` | Site title. Auto-extracted from the index page H1 if omitted. |
 | `description` | Site description. Used for OpenGraph/Twitter cards and the `llms.txt` header. |
+| `image` | Social card image (path or URL) embedded in OpenGraph/Twitter card metadata. |
+| `logo` | Navbar logo image (path or URL). |
+| `favicon` | Site favicon (path or URL). |
 | `url` | Canonical site URL. Used when generating absolute links in `llms.txt`. |
 | `repo` | GitHub repo as `org/repo`. Enables the navbar GitHub icon and source links on reference pages. |
 | `org` | Organization name. Adds a left-side footer link. |
@@ -155,3 +158,7 @@ Options available under `inspect-docs:` in `_quarto.yml`:
 | `navigation` | Navbar and sidebar entries (see [Articles](articles.html.md)). |
 | `sidebar` | Show the sidebar. Defaults to `true` when `navigation` is set. |
 | `external_refs` | Map of `package_name: docs_url` for cross-package interlinking (see [Interlinks](interlinks.html.md)). |
+
+### Custom Navbar
+
+The extension builds `website.navbar.left` from `inspect-docs.navigation` and `website.navbar.right` from `repo` + `CHANGELOG.md` detection. If you want finer control — for example, a flat top-level navbar with no dropdowns — you can provide `website.navbar.left` (or `right`) directly in `_quarto.yml`. When the extension sees a user-provided `left`, it skips its own generation (including the auto-appended “Reference” link, which you can add manually). The sidebar continues to auto-generate from `inspect-docs.navigation` either way.

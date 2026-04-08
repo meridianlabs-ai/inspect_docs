@@ -40,9 +40,20 @@ llms-description: Installation, first render, and project layout.
 
 If `llms-description` is absent, `description` is used.
 
+## Full Documentation
+
+Alongside `llms.txt`, Inspect Docs also publishes two concatenated files at the site root for LLMs that want to ingest the entire site in a single request:
+
+| File             | Contents                                          |
+|------------------|---------------------------------------------------|
+| `llms-full.txt`  | Every page in the site, including reference docs. |
+| `llms-guide.txt` | Every page *except* anything under `reference/`.  |
+
+Both files are built by concatenating the per-page Markdown sources in navigation order, with the site title and description as a header.
+
 ## Markdown Pages
 
-Inspect Docs also publishes a plain-Markdown version of each page at the same URL with `.html.md` appended. A page rendered at `https://docs.example.com/guides/install.html` is also available at `https://docs.example.com/guides/install.html.md`.
+Inspect Docs publishes a plain-Markdown version of each page at the same URL with `.html.md` appended. A page rendered at `https://docs.example.com/guides/install.html` is also available at `https://docs.example.com/guides/install.html.md`.
 
 Inspect Docs also injects a **Copy page** button into every page header. The button lets readers:
 

@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-00d6323372c11ee1e1ff703f7da802e4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-ab1bf0485cdc037c1916ce67db55c611.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -223,11 +223,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
     <h2 id="toc-title">On this page</h2>
    
+  <ul>
+  <li><a href="#index-page" id="toc-index-page" class="nav-link active" data-scroll-target="#index-page">Index Page</a>
   <ul class="collapse">
-  <li><a href="#index-page" id="toc-index-page" class="nav-link active" data-scroll-target="#index-page">Index Page</a></li>
+  <li><a href="#descriptions" id="toc-descriptions" class="nav-link" data-scroll-target="#descriptions">Descriptions</a></li>
+  </ul></li>
+  <li><a href="#full-documentation" id="toc-full-documentation" class="nav-link" data-scroll-target="#full-documentation">Full Documentation</a></li>
   <li><a href="#markdown-pages" id="toc-markdown-pages" class="nav-link" data-scroll-target="#markdown-pages">Markdown Pages</a></li>
   </ul>
 </nav>
@@ -286,9 +290,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>If <code>llms-description</code> is absent, <code>description</code> is used.</p>
 </section>
 </section>
+<section id="full-documentation" class="level2">
+<h2 class="anchored" data-anchor-id="full-documentation">Full Documentation</h2>
+<p>Alongside <code>llms.txt</code>, Inspect Docs also publishes two concatenated files at the site root for LLMs that want to ingest the entire site in a single request:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 24%">
+<col style="width: 75%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>llms-full.txt</code></td>
+<td>Every page in the site, including reference docs.</td>
+</tr>
+<tr class="even">
+<td><code>llms-guide.txt</code></td>
+<td>Every page <em>except</em> anything under <code>reference/</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Both files are built by concatenating the per-page Markdown sources in navigation order, with the site title and description as a header.</p>
+</section>
 <section id="markdown-pages" class="level2">
 <h2 class="anchored" data-anchor-id="markdown-pages">Markdown Pages</h2>
-<p>Inspect Docs also publishes a plain-Markdown version of each page at the same URL with <code>.html.md</code> appended. A page rendered at <code>https://docs.example.com/guides/install.html</code> is also available at <code>https://docs.example.com/guides/install.html.md</code>.</p>
+<p>Inspect Docs publishes a plain-Markdown version of each page at the same URL with <code>.html.md</code> appended. A page rendered at <code>https://docs.example.com/guides/install.html</code> is also available at <code>https://docs.example.com/guides/install.html.md</code>.</p>
 <p>Inspect Docs also injects a <strong>Copy page</strong> button into every page header. The button lets readers:</p>
 <ul>
 <li><strong>Copy as Markdown</strong> — copy the page’s Markdown source to the clipboard.</li>

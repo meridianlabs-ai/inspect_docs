@@ -78,7 +78,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-00d6323372c11ee1e1ff703f7da802e4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-ab1bf0485cdc037c1916ce67db55c611.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -223,16 +223,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
     <h2 id="toc-title">On this page</h2>
    
+  <ul>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting Started</a>
   <ul class="collapse">
-  <li><a href="#getting-started" id="toc-getting-started" class="nav-link active" data-scroll-target="#getting-started">Getting Started</a></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#configuration" id="toc-configuration" class="nav-link" data-scroll-target="#configuration">Configuration</a></li>
+  <li><a href="#dependencies" id="toc-dependencies" class="nav-link" data-scroll-target="#dependencies">Dependencies</a></li>
+  <li><a href="#preview" id="toc-preview" class="nav-link" data-scroll-target="#preview">Preview</a></li>
+  </ul></li>
   <li><a href="#articles" id="toc-articles" class="nav-link" data-scroll-target="#articles">Articles</a></li>
   <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">Reference</a></li>
   <li><a href="#interlinks" id="toc-interlinks" class="nav-link" data-scroll-target="#interlinks">Interlinks</a></li>
   <li><a href="#llms.txt" id="toc-llms.txt" class="nav-link" data-scroll-target="#llms.txt">llms.txt</a></li>
-  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options">Options</a></li>
+  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options">Options</a>
+  <ul class="collapse">
+  <li><a href="#custom-navbar" id="toc-custom-navbar" class="nav-link" data-scroll-target="#custom-navbar">Custom Navbar</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -380,41 +389,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Site description. Used for OpenGraph/Twitter cards and the <code>llms.txt</code> header.</td>
 </tr>
 <tr class="odd">
+<td><code>image</code></td>
+<td>Social card image (path or URL) embedded in OpenGraph/Twitter card metadata.</td>
+</tr>
+<tr class="even">
+<td><code>logo</code></td>
+<td>Navbar logo image (path or URL).</td>
+</tr>
+<tr class="odd">
+<td><code>favicon</code></td>
+<td>Site favicon (path or URL).</td>
+</tr>
+<tr class="even">
 <td><code>url</code></td>
 <td>Canonical site URL. Used when generating absolute links in <code>llms.txt</code>.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>repo</code></td>
 <td>GitHub repo as <code>org/repo</code>. Enables the navbar GitHub icon and source links on reference pages.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>org</code></td>
 <td>Organization name. Adds a left-side footer link.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>module</code></td>
 <td>Python import name. Auto-discovered from <code>pyproject.toml</code>; set explicitly only when the import name differs from the distribution name.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>cli</code></td>
 <td>CLI binary name (for Click command pages). Auto-discovered from <code>pyproject.toml</code>’s <code>[project.scripts]</code>; set explicitly when the binary name differs from the module name.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>navigation</code></td>
 <td>Navbar and sidebar entries (see <a href="./articles.html">Articles</a>).</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code>sidebar</code></td>
 <td>Show the sidebar. Defaults to <code>true</code> when <code>navigation</code> is set.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>external_refs</code></td>
 <td>Map of <code>package_name: docs_url</code> for cross-package interlinking (see <a href="./interlinks.html">Interlinks</a>).</td>
 </tr>
 </tbody>
 </table>
+<section id="custom-navbar" class="level3">
+<h3 class="anchored" data-anchor-id="custom-navbar">Custom Navbar</h3>
+<p>The extension builds <code>website.navbar.left</code> from <code>inspect-docs.navigation</code> and <code>website.navbar.right</code> from <code>repo</code> + <code>CHANGELOG.md</code> detection. If you want finer control — for example, a flat top-level navbar with no dropdowns — you can provide <code>website.navbar.left</code> (or <code>right</code>) directly in <code>_quarto.yml</code>. When the extension sees a user-provided <code>left</code>, it skips its own generation (including the auto-appended “Reference” link, which you can add manually). The sidebar continues to auto-generate from <code>inspect-docs.navigation</code> either way.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

@@ -1,0 +1,514 @@
+# Inspect Docs
+
+> A Quarto project type extension for Python package documentation with automatic API reference generation.
+
+
+# Inspect Docs
+
+Inspect Docs helps you create documentation websites for Python packages using Quarto:
+
+- Author articles using all the features of standard Quarto markdown.
+- Generate API reference pages from your source code via [griffe](https://mkdocstrings.github.io/griffe/).
+- Automatically turn inline code references into links to documentation.
+- Generate an [llms.txt](https://llmstxt.org) and Markdown doc pages so LLMs can ingest your site.
+
+## Getting Started
+
+### Installation
+
+To create a new documentation site within a Python package:
+
+``` bash
+mkdir docs
+cd docs
+quarto use template meridianlabs-ai/inspect-docs
+```
+
+To take an existing doc site and update it to use `inspect-docs`:
+
+``` bash
+cd docs
+quarto add meridianlabs-ai/inspect-docs
+```
+
+To update to a more recent version of the extension:
+
+``` bash
+cd docs
+quarto update meridianlabs-ai/inspect-docs
+```
+
+### Configuration
+
+Edit `docs/_quarto.yml` to reference the project type and provide basic site configuration:
+
+``` yaml
+project:
+  type: meridianlabs-ai/inspect-docs
+
+inspect-docs:
+  title: "Package Title"
+  description: "Package Description"
+  url: https://example.com/mypackage
+  repo: myorg/mypackage
+  org: My Org
+```
+
+All `inspect-docs:` fields are optional; see [Options](#options) below for the full list.
+
+### Dependencies
+
+Inspect Docs requires Quarto 1.9.36 or later plus a handful of Python packages. Add them to your `dev` dependencies:
+
+``` toml
+[dependency-groups]
+dev = [
+    "ruff",
+    "pytest",
+    "pyright",
+    ...
+    {include-group = "doc"},
+]
+doc = [
+    "jupyter",
+    "panflute",
+    "markdown",
+    "griffe",
+    "pyyaml",
+    "types-PyYAML",
+    "quarto-cli>=1.9.36",
+]
+```
+
+Then install them:
+
+``` bash
+uv sync
+```
+
+### Preview
+
+By default, Inspect Docs will symlink to any `README.md` and `CHANGELOG.md` in the root of your repo and create a site based on their contents. Preview it with:
+
+``` bash
+cd docs
+quarto preview
+```
+
+## Articles
+
+Articles are `.qmd` files you list under `navigation` in `_quarto.yml`. A simple navigation block looks like this:
+
+``` yaml
+inspect-docs:
+  navigation:
+    - text: Getting Started
+      href: index.qmd
+    - text: Guides
+      contents:
+        - text: Installation
+          href: guides/install.qmd
+```
+
+Simple items become navbar links and sidebar entries. Items with `contents` become dropdowns and sidebar sections. See [Articles](articles.html.md) for additional documentation on authoring and navigation.
+
+## Reference
+
+Create a `.qmd` file in a `reference/` directory, set a `reference:` field to the Python import path the page documents, and add H3 headings for each symbol:
+
+``` markdown
+---
+title: Async Helpers
+reference: my_package.aio
+---
+
+### run_async
+### gather
+```
+
+Each H3 is replaced with the full signature, docstring, parameters, attributes, and a link to the source on GitHub — generated via [griffe](https://mkdocstrings.github.io/griffe/). The `reference:` field is required (pages without it are ignored) and tells Inspect Docs which module’s symbols to look up. Docstrings must be [Google-style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings). See [Reference](reference.html.md) for a more in-depth guide.
+
+## Interlinks
+
+Inline code references to documented symbols are automatically linked to their reference pages on every page in the site:
+
+``` markdown
+See `MyClass` and `my_function()` for details.
+```
+
+`` `MyClass` `` (starts uppercase) links to the class’s reference page; `` `my_function()` `` (trailing `()`) links to the function’s reference page.
+
+When `external_refs` is configured, inline code also resolves against other Inspect Docs sites. See [Interlinks](interlinks.html.md) to learn more.
+
+## llms.txt
+
+Every site includes an auto-generated [`llms.txt`](https://llmstxt.org) at the root and per-page Markdown sources at `{page}.html.md`. A **Copy page** button in the page header lets readers grab the Markdown or open it in a new tab. See [llms.txt](llms.html.md) for details.
+
+## Options
+
+Options available under `inspect-docs:` in `_quarto.yml`:
+
+| Field | Description |
+|----|----|
+| `title` | Site title. Auto-extracted from the index page H1 if omitted. |
+| `description` | Site description. Used for OpenGraph/Twitter cards and the `llms.txt` header. |
+| `image` | Social card image (path or URL) embedded in OpenGraph/Twitter card metadata. |
+| `logo` | Navbar logo image (path or URL). |
+| `favicon` | Site favicon (path or URL). |
+| `url` | Canonical site URL. Used when generating absolute links in `llms.txt`. |
+| `repo` | GitHub repo as `org/repo`. Enables the navbar GitHub icon and source links on reference pages. |
+| `org` | Organization name. Adds a left-side footer link. |
+| `module` | Python import name. Auto-discovered from `pyproject.toml`; set explicitly only when the import name differs from the distribution name. |
+| `cli` | CLI binary name (for Click command pages). Auto-discovered from `pyproject.toml`’s `[project.scripts]`; set explicitly when the binary name differs from the module name. |
+| `navigation` | Navbar and sidebar entries (see [Articles](articles.html.md)). |
+| `sidebar` | Show the sidebar. Defaults to `true` when `navigation` is set. |
+| `external_refs` | Map of `package_name: docs_url` for cross-package interlinking (see [Interlinks](interlinks.html.md)). |
+
+### Custom Navbar
+
+The extension builds `website.navbar.left` from `inspect-docs.navigation` and `website.navbar.right` from `repo` + `CHANGELOG.md` detection. If you want finer control — for example, a flat top-level navbar with no dropdowns — you can provide `website.navbar.left` (or `right`) directly in `_quarto.yml`. When the extension sees a user-provided `left`, it skips its own generation (including the auto-appended “Reference” link, which you can add manually). The sidebar continues to auto-generate from `inspect-docs.navigation` either way.
+
+
+# Articles
+
+Articles are the prose pages of your docs site: guides, tutorials, explainers, design notes—anything that isn’t auto-generated API reference. They’re written as `.qmd` files and organized through the `navigation` key in `_quarto.yml`.
+
+## Basics
+
+By default, Inspect Docs will symlink any `README.md` and `CHANGELOG.md` from the root of your repo into the docs directory. The README becomes your landing page (rendered at `index.qmd`) unless you create your own `index.qmd`, in which case the README symlink is skipped and your page takes precedence.
+
+If you’d rather write a dedicated landing page that’s different from your README, just create `docs/index.qmd` and populate it however you like—the rest of the site behaves identically.
+
+Add more articles by creating a `.qmd` file anywhere in your docs directory with a title and (optionally) a description in the frontmatter:
+
+``` markdown
+---
+title: Getting Started
+description: Install the package and render your first site.
+---
+
+Welcome!
+```
+
+The `description` field is used in the auto-generated reference index, in OpenGraph/Twitter cards, and as the page’s entry in `llms.txt`.
+
+## Navigation
+
+The `navigation` key in `_quarto.yml` defines both the navbar and the sidebar from a single source.
+
+### Simple entries
+
+Top-level items with `text` and `href` become navbar links *and* sidebar entries:
+
+``` yaml
+inspect-docs:
+  navigation:
+    - text: Getting Started
+      href: index.qmd
+    - text: FAQ
+      href: faq.qmd
+```
+
+### Nested sections
+
+Items with a `contents` list become navbar dropdown menus and sidebar sections:
+
+``` yaml
+inspect-docs:
+  navigation:
+    - text: Getting Started
+      href: index.qmd
+    - text: Guides
+      contents:
+        - text: Installation
+          href: guides/install.qmd
+        - text: Configuration
+          href: guides/config.qmd
+        - text: Publishing
+          href: guides/publish.qmd
+```
+
+The dropdown label (“Guides” above) doesn’t have an `href` of its own—it just groups the child entries.
+
+### Automatic entries
+
+Inspect Docs adds a couple of navbar entries automatically:
+
+- A **Reference** link is appended to the navbar whenever a `reference/` directory exists.
+- A **Changelog** link is added to the navbar’s right side whenever the project root contains a `CHANGELOG.md`.
+
+You don’t need to list either of these in `navigation`.
+
+## Diagrams
+
+Quarto has built-in support for [Mermaid](https://quarto.org/docs/authoring/diagrams.html#mermaid) and [Graphviz](https://quarto.org/docs/authoring/diagrams.html#graphviz) diagrams — see [Quarto’s diagram documentation](https://quarto.org/docs/authoring/diagrams.html).
+
+Inspect Docs adds support for [Excalidraw](https://excalidraw.com). Embed an `.excalidraw` file as an image and the extension converts it to SVG at build time (Node.js dependencies are installed on first use; results are cached):
+
+``` markdown
+![Architecture](diagrams/architecture.excalidraw)
+```
+
+Optional attributes control the rendered output:
+
+``` markdown
+![Architecture](diagrams/architecture.excalidraw){theme=dark background=true padding=20 scale=2}
+```
+
+| Attribute    | Default | Description                           |
+|--------------|---------|---------------------------------------|
+| `theme`      | `light` | `light` or `dark`                     |
+| `background` | `false` | Include the Excalidraw background     |
+| `padding`    | `10`    | Padding around the diagram, in pixels |
+| `scale`      | `1`     | Export scale factor                   |
+
+
+# Reference
+
+Reference pages document your package’s public API. Place `.qmd` files in a `reference/` directory and Inspect Docs auto-discovers them, builds a reference sidebar, and generates a cross-reference index. H3 headings on each page are replaced with full API documentation generated from your Python source.
+
+Every reference page must declare its binding via a frontmatter `reference:` field — the Python import path (for API pages) or CLI command path (for CLI pages) that the page documents. Pages without a `reference:` field are ignored. Filenames are not used for matching, so you can name the files however you like.
+
+## Python API
+
+A reference page documents a single module. Set `reference:` to that module’s import path, then add H2 headings for organizational sections (rendered as-is) and H3 headings for each symbol:
+
+``` markdown
+---
+title: Async Helpers
+reference: my_package.aio
+---
+
+## Coroutines
+
+### run_async
+### gather
+
+## Utilities
+
+### shield
+```
+
+The H3 headings above resolve to `my_package.aio.run_async`, `my_package.aio.gather`, and `my_package.aio.shield`. Each is replaced with the full function or class documentation: signature, docstring, parameters, attributes, methods, and a “source” link pointing at your repo on GitHub.
+
+A page documenting the project’s main module sets `reference:` to that module name:
+
+``` markdown
+---
+title: Scanner API
+reference: my_package
+---
+
+### Scanner
+### scanner_decorator
+```
+
+The H3 headings here resolve to `my_package.Scanner` and `my_package.scanner_decorator`.
+
+### Title defaulting
+
+Page title precedence:
+
+1.  Frontmatter `title:` if present.
+2.  Else, the value of `reference:` (which is convenient for single-module pages — `reference: my_package.utils` becomes the displayed title with no extra typing).
+3.  Else, Quarto’s normal title behavior (first H1 / filename).
+
+### Docstring conventions
+
+Docstrings must be written in [Google style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings):
+
+``` python
+def run_task(name: str, *, timeout: float = 30.0) -> TaskResult:
+    """Run a task by name.
+
+    Args:
+        name: The registered task name.
+        timeout: Maximum seconds to wait before cancelling.
+
+    Returns:
+        The result of the task, or a cancellation marker if it timed out.
+
+    Raises:
+        TaskNotFoundError: If no task is registered under `name`.
+    """
+```
+
+If a symbol has no docstring, Inspect Docs emits a warning during the render and skips that entry.
+
+## CLI Commands
+
+For packages that expose a [Click](https://click.palletsprojects.com/) CLI, reference pages bind to a command via the same `reference:` field:
+
+``` markdown
+---
+reference: my_package run
+---
+```
+
+The page displays as `my_package run` (title defaulted from `reference:`) and is populated with usage, description, options, and subcommands derived from the Click command at `my_package._cli.run`.
+
+A page is treated as a CLI command page when its `reference:` value starts with `<cli>` (binary name + space) or equals `<cli>` exactly. Otherwise it’s an API page.
+
+### CLI binary name
+
+Inspect Docs needs to know your CLI binary name to recognize CLI pages. By default it’s auto-discovered from `pyproject.toml`’s `[project.scripts]` table — preferring an entry whose value references `{module}._cli`. If that doesn’t pick the right one, set it explicitly in `_quarto.yml`:
+
+``` yaml
+inspect-docs:
+  module: my_package
+  cli: my-binary    # only needed if it differs from the module name
+```
+
+The CLI binary name is independent of the Python module name. For example, a package named `inspect_scout` whose `pyproject.toml` exposes a `scout` script would set (or auto-discover) `cli: scout`, and CLI pages would use `reference: scout <command>`.
+
+## Inline Reference
+
+You can embed API reference documentation on any article page (i.e. outside `reference/`) by using the `reference` attribute on a heading:
+
+``` markdown
+---
+title: Getting Started
+reference: my_package
+---
+
+## Key functions
+
+### My Function {reference="my_function"}
+
+Some additional context about this function…
+
+### My Class {reference="MyClass"}
+```
+
+The page-level `reference:` field declares the binding (same field as on reference pages). On article pages outside `reference/`, only headings with an explicit `{reference="..."}` attribute become symbols; plain H3s remain plain headings.
+
+## Reference Index
+
+A `reference/index.qmd` is automatically generated from the discovered reference pages. It groups API pages and CLI command pages into separate tables, each row showing the page title and its `description` field.
+
+
+# Interlinks
+
+Interlinks turn inline code references like `` `MyClass` `` and `` `my_function()` `` into links to the right reference page automatically. Interlinks can also extend across projects: if you depend on another package that publishes an Inspect Docs site, references to its symbols are linked too.
+
+## Local References
+
+Inspect Docs scans the rendered content on every page for inline code spans and attempts to resolve each one as a symbol in your project’s reference index. Two heuristics drive the lookup:
+
+- A code span that starts with an uppercase letter (e.g. `` `MyClass` ``, `` `TaskResult` ``) is treated as a class or type reference.
+- A code span that ends with `()` (e.g. `` `my_function()` ``, `` `run_task()` ``) is treated as a function or method reference.
+
+If the lookup succeeds, the code span is rewritten as a link to the symbol’s reference page. If it fails, the code span is left as plain code.
+
+## External References
+
+You can link to API symbols documented in other Inspect Docs sites by declaring them under `external_refs` in `_quarto.yml`:
+
+``` yaml
+inspect-docs:
+  external_refs:
+    inspect_ai: https://inspect.aisi.org.uk
+    other_package: https://docs.example.com/other
+```
+
+### Resolution Scheme
+
+At render time the extension fetches `{url}/reference/refs.json` from each listed package and caches it locally in your `reference/` directory. Inline code references in your prose are then resolved against both the local project and the external packages, in order:
+
+1.  The local project first.
+2.  Each external package, in the order it’s listed under `external_refs`.
+
+The first match wins. Links point at the external site’s reference pages.
+
+### Forcing Packages
+
+If the same symbol name appears in more than one package—or if you want to unambiguously reference an external symbol even when a local one exists—use the `pkg::Symbol` syntax:
+
+``` markdown
+See `inspect_ai::Task` for the base class we extend.
+```
+
+This bypasses local resolution and looks up `Task` directly in the `inspect_ai` external package.
+
+### Opting Out
+
+To suppress interlinking on a specific code span—for example, when you’re showing an illustrative example, discussing a type-name collision, or mentioning a symbol that happens to match the naming heuristic but shouldn’t be a link—add the `.noref` class:
+
+``` markdown
+The string `MyClass`{.noref} is the expected value here.
+```
+
+The code span renders as plain code with no lookup attempted.
+
+## Publishing Refs
+
+Every site built with Inspect Docs is automatically a valid `external_refs` target — `reference/refs.json` is generated and published as part of every render. Other projects can point at your site’s URL and pick up your symbols:
+
+``` yaml
+inspect-docs:
+  external_refs:
+    your_package: https://docs.your-package.example.com
+```
+
+
+# llms.txt
+
+## Index Page
+
+Inspect Docs produces an [`llms.txt`](https://llmstxt.org) index page at the root of your site, built from your site’s `title`, `description`, `navigation`, and reference pages:
+
+``` markdown
+# My Package
+
+> Description of what the package does.
+
+## Docs
+
+- [Getting Started](https://docs.example.com/index.html): Install the package and render your first site.
+- [Guides](https://docs.example.com/guides/index.html): Task-oriented walkthroughs.
+
+## API Reference
+
+- [my_package](https://docs.example.com/reference/my_package.html): Core tasks and utilities.
+- [my_package.utils](https://docs.example.com/reference/my_package.utils.html): Helper functions.
+
+## CLI Reference
+
+- [my_package run](https://docs.example.com/reference/my_package_run.html): Run a task.
+```
+
+### Descriptions
+
+Each entry in `llms.txt` uses the page’s frontmatter `description` field as its summary.
+
+To use a different summary for `llms.txt` than the one shown on the page, set `llms-description`:
+
+``` yaml
+---
+title: Getting Started
+description: Get up and running in five minutes!
+llms-description: Installation, first render, and project layout.
+---
+```
+
+If `llms-description` is absent, `description` is used.
+
+## Full Documentation
+
+Alongside `llms.txt`, Inspect Docs also publishes two concatenated files at the site root for LLMs that want to ingest the entire site in a single request:
+
+| File             | Contents                                          |
+|------------------|---------------------------------------------------|
+| `llms-full.txt`  | Every page in the site, including reference docs. |
+| `llms-guide.txt` | Every page *except* anything under `reference/`.  |
+
+Both files are built by concatenating the per-page Markdown sources in navigation order, with the site title and description as a header.
+
+## Markdown Pages
+
+Inspect Docs publishes a plain-Markdown version of each page at the same URL with `.html.md` appended. A page rendered at `https://docs.example.com/guides/install.html` is also available at `https://docs.example.com/guides/install.html.md`.
+
+Inspect Docs also injects a **Copy page** button into every page header. The button lets readers:
+
+- **Copy as Markdown** — copy the page’s Markdown source to the clipboard.
+- **Open as Markdown** — open the `.html.md` version in a new tab.
