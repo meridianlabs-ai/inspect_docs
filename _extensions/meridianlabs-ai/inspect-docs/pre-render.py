@@ -239,10 +239,13 @@ def _build_footer(
                 "aria-label": f"{title or org_name} Twitter",
             }
         )
+    # Use a trailing slash so this URL differs from the center "Code"
+    # text link -- Quarto's footer renderer dedupes items by href and
+    # will drop the icon if both sides share the exact same URL.
     right.append(
         {
             "icon": "github",
-            "href": repo_url,
+            "href": f"{repo_url}/",
             "aria-label": f"{title} on GitHub",
         }
     )
