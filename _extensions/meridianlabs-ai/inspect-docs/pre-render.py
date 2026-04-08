@@ -217,12 +217,15 @@ def generate_website_metadata(opts: YamlDict, repo: str) -> YamlDict:
         }
     }
 
-    if title or description:
+    site_image: str = opts.get("image", "")
+    if title or description or site_image:
         card: YamlDict = {}
         if title:
             card["title"] = title
         if description:
             card["description"] = description
+        if site_image:
+            card["image"] = site_image
         generated["website"]["twitter-card"] = dict(card)
         generated["website"]["open-graph"] = dict(card)
 
