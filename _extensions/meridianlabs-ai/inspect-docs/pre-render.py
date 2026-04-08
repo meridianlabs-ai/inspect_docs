@@ -256,11 +256,38 @@ def _nested_children(item: YamlDict) -> list[YamlDict] | None:
     return None
 
 
+def _flatten_menu_leaves(items: list[YamlDict]) -> list[YamlDict]:
+    """Recursively flatten a nested navigation tree into leaf entries only.
+
+    Quarto navbar dropdown menus only support a flat list of `text`/`href`
+    items (plus `---` separators) — no nested sub-menus. We use this to
+    collapse hierarchical navigation into a single-level navbar dropdown
+    while the sidebar retains the full hierarchy via `nav_to_sidebar`.
+    """
+    leaves: list[YamlDict] = []
+    for item in items:
+        children = _nested_children(item)
+        if children is None:
+            # leaf entry (text/href or plain href)
+            leaves.append({k: v for k, v in item.items() if k not in ("contents", "menu")})
+        else:
+            # a branch: if it has its own href, include it as a leaf before
+            # recursing into its children
+            if "href" in item:
+                leaves.append(
+                    {k: v for k, v in item.items() if k not in ("contents", "menu")}
+                )
+            leaves.extend(_flatten_menu_leaves(children))
+    return leaves
+
+
 def nav_to_navbar(items: list[YamlDict]) -> list[YamlDict]:
     """Convert docs-navigation items to navbar format.
 
     Simple items (text + href) pass through as navbar links.
-    Items with `contents` (or `menu`) become dropdown menus.
+    Items with `contents` (or `menu`) become dropdown menus. Quarto
+    navbar menus are flat — so any deeper nesting is flattened into a
+    single-level list of leaf entries via `_flatten_menu_leaves`.
     """
     navbar_items: list[YamlDict] = []
     for item in items:
@@ -269,7 +296,7 @@ def nav_to_navbar(items: list[YamlDict]) -> list[YamlDict]:
             navbar_items.append(
                 {
                     "text": item.get("text", ""),
-                    "menu": children,
+                    "menu": _flatten_menu_leaves(children),
                 }
             )
         else:
