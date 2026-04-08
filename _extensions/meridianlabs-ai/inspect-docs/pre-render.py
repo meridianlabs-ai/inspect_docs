@@ -37,6 +37,11 @@ def main() -> None:
 
     opts: YamlDict = config.get("inspect-docs", {})
 
+    # user-provided website overrides (merged with extension defaults)
+    user_website: YamlDict = config.get("website") or {}
+    user_navbar: YamlDict = user_website.get("navbar") or {}
+
+
     # create default .gitignore if none exists
     gitignore = Path(".gitignore")
     gitignore.write_text(
@@ -83,7 +88,7 @@ def main() -> None:
     # generate derived website metadata
     repo: str | None = opts.get("repo")
     if repo is not None:
-        generated = generate_website_metadata(opts, repo)
+        generated = generate_website_metadata(opts, repo, user_navbar)
 
     # build sidebar: user navigation + reference sidebar
     sidebars: list[YamlDict] = []
@@ -179,8 +184,32 @@ def ensure_excalidraw_deps() -> None:
     )
 
 
-def generate_website_metadata(opts: YamlDict, repo: str) -> YamlDict:
-    """Generate derived website metadata from inspect-docs config."""
+def _build_navbar(
+    opts: YamlDict, repo_url: str, title: str, user_navbar: YamlDict
+) -> YamlDict:
+    """Build website.navbar, skipping left/right when the user provides them."""
+    navbar: YamlDict = {
+        "title": title,
+        "background": "light",
+        "search": True,
+    }
+    if "left" not in user_navbar:
+        navbar["left"] = nav_to_navbar(opts.get("navigation", []))
+    if "right" not in user_navbar:
+        navbar["right"] = navbar_right(repo_url)
+    return navbar
+
+
+def generate_website_metadata(
+    opts: YamlDict, repo: str, user_navbar: YamlDict
+) -> YamlDict:
+    """Generate derived website metadata from inspect-docs config.
+
+    `user_navbar` is the user's own `website.navbar` block (if any)
+    from `_quarto.yml`. When the user provides `left` or `right` keys
+    directly, we skip generating those sides so the user's values are
+    kept verbatim.
+    """
     title: str = opts.get("title", "")
     description: str = opts.get("description", "")
     site_url: str = opts.get("url", "")
@@ -194,13 +223,7 @@ def generate_website_metadata(opts: YamlDict, repo: str) -> YamlDict:
             "description": description,
             "site-url": site_url,
             "repo-url": repo_url,
-            "navbar": {
-                "title": title,
-                "background": "light",
-                "search": True,
-                "left": nav_to_navbar(opts.get("navigation", [])),
-                "right": navbar_right(repo_url),
-            },
+            "navbar": _build_navbar(opts, repo_url, title, user_navbar),
             "page-footer": {
                 "center": [
                     {"text": "License", "href": f"{repo_url}/blob/main/LICENSE"},
@@ -234,12 +257,15 @@ def generate_website_metadata(opts: YamlDict, repo: str) -> YamlDict:
             {"text": org_name, "href": f"https://github.com/{org}"}
         ]
 
-    # add Reference navbar link if reference docs exist
-    ref_dir = Path("reference")
-    if ref_dir.is_dir() and any(ref_dir.glob("*.qmd")):
-        generated["website"]["navbar"]["left"].append(
-            {"text": "Reference", "href": "reference/index.qmd"}
-        )
+    # add Reference navbar link if reference docs exist (only when we
+    # generated the left navbar; if the user provided their own left,
+    # they're responsible for including the Reference link themselves)
+    if "left" not in user_navbar:
+        ref_dir = Path("reference")
+        if ref_dir.is_dir() and any(ref_dir.glob("*.qmd")):
+            generated["website"]["navbar"]["left"].append(
+                {"text": "Reference", "href": "reference/index.qmd"}
+            )
 
     return generated
 
