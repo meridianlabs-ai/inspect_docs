@@ -72,7 +72,7 @@ doc = [
     "jupyter",
     "panflute",
     "markdown",
-    "griffe",
+    "griffe>=2",
     "pyyaml",
     "types-PyYAML",
     "quarto-cli>=1.9.36",
