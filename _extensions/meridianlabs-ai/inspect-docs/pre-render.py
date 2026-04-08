@@ -287,7 +287,6 @@ def generate_website_metadata(
     description: str = opts.get("description", "")
     site_url: str = opts.get("url", "")
     org_name: str = opts.get("org", "")
-    org = repo.split("/")[0]
     repo_url = f"https://github.com/{repo}"
 
     generated: YamlDict = {
