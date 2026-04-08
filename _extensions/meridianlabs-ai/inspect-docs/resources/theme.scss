@@ -166,6 +166,14 @@ table {
     flex-wrap: wrap;
 }
 
+// When a page has a subtitle, force it onto its own row below the
+// title + copy-page button so the button stays in the top-right of
+// the title row regardless of subtitle length.
+.quarto-title > .subtitle {
+    flex-basis: 100%;
+    order: 2;
+}
+
 #copy-page-btn {
     flex-shrink: 0;
     margin-left: auto;
