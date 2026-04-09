@@ -57,7 +57,7 @@ All `inspect-docs:` fields are optional; see [Options](#options) below for the f
 
 ### Dependencies
 
-Inspect Docs requires Quarto 1.9.36 or later plus a handful of Python packages. Add them to your `dev` dependencies:
+Inspect Docs requires Quarto >= 1.7 plus a handful of Python packages. Add them to your `dev` dependencies:
 
 ```toml
 [dependency-groups]
@@ -75,7 +75,8 @@ doc = [
     "griffe>=2",
     "pyyaml",
     "types-PyYAML",
-    "quarto-cli>=1.9.36",
+    "rich",
+    "quarto-cli>=1.7",
 ]
 ```
 
