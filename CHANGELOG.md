@@ -1,4 +1,9 @@
 
+
+## 1.0.3 (12 April 2026)
+
+- Various improvements.
+
 ## 1.0.2 (10 April 2026)
 
 - Only write files that have changed in pre-render.py.
