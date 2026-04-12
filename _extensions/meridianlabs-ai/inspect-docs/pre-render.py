@@ -173,13 +173,18 @@ def main() -> None:
     if sidebars:
         generated.setdefault("website", {})["sidebar"] = sidebars
 
-    # install excalidraw conversion dependencies if .excalidraw files exist
-    if any(
+    # convert .excalidraw files to SVG (before Quarto starts watching)
+    excalidraw_files = [
         p
         for p in Path(".").glob("**/*.excalidraw")
-        if not any(part.startswith((".", "_")) or part == "node_modules" for part in p.parts)
-    ):
+        if not any(
+            part.startswith((".", "_")) or part == "node_modules"
+            for part in p.parts
+        )
+    ]
+    if excalidraw_files:
         ensure_excalidraw_deps()
+        convert_excalidraw_files(excalidraw_files)
 
     write_if_changed(
         Path("_include.yml"),
@@ -232,11 +237,29 @@ def ensure_excalidraw_deps() -> None:
     """Install Node.js dependencies for excalidraw SVG conversion if needed."""
     ext_dir = Path(__file__).parent
     excalidraw_dir = ext_dir / "resources" / "excalidraw"
+    if (excalidraw_dir / "node_modules").is_dir():
+        return
     subprocess.run(
         ["npm", "install", "--prefix", str(excalidraw_dir)],
         check=True,
         stdout=subprocess.DEVNULL,
     )
+
+
+def convert_excalidraw_files(files: list[Path]) -> None:
+    """Convert .excalidraw files to SVG, skipping unchanged sources."""
+    ext_dir = Path(__file__).parent
+    converter = ext_dir / "resources" / "excalidraw" / "excalidraw-to-svg.mjs"
+    for src in files:
+        svg = src.with_name(src.name + ".svg")
+        # skip if SVG exists and is newer than source
+        if svg.exists() and svg.stat().st_mtime >= src.stat().st_mtime:
+            continue
+        subprocess.run(
+            ["node", str(converter), str(src), str(svg)],
+            check=True,
+            capture_output=True,
+        )
 
 
 def _build_footer(

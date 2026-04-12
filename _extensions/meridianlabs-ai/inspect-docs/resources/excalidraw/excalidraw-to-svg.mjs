@@ -180,5 +180,11 @@ svgString = svgString.replace(
   `font-family="'SFMono-Regular', Menlo, Consolas, 'Courier New', monospace"`,
 );
 
-writeFileSync(resolve(outputPath), svgString, "utf-8");
+// Only write if content changed to avoid triggering Quarto's file watcher
+const outFile = resolve(outputPath);
+let existing = "";
+try { existing = readFileSync(outFile, "utf-8"); } catch {}
+if (svgString !== existing) {
+  writeFileSync(outFile, svgString, "utf-8");
+}
 dom.window.close();
