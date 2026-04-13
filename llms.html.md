@@ -1,4 +1,4 @@
-# llms.txt
+# llms.txt – Inspect Docs
 
 ## Index Page
 

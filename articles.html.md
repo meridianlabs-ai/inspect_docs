@@ -1,4 +1,4 @@
-# Articles
+# Articles – Inspect Docs
 
 Articles are the prose pages of your docs site: guides, tutorials, explainers, design notes—anything that isn’t auto-generated API reference. They’re written as `.qmd` files and organized through the `navigation` key in `_quarto.yml`.
 

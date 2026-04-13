@@ -1,4 +1,4 @@
-# Interlinks
+# Interlinks – Inspect Docs
 
 Interlinks turn inline code references like `` `MyClass` `` and `` `my_function()` `` into links to the right reference page automatically. Interlinks can also extend across projects: if you depend on another package that publishes an Inspect Docs site, references to its symbols are linked too.
 

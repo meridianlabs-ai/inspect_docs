@@ -53,7 +53,7 @@ All `inspect-docs:` fields are optional; see [Options](#options) below for the f
 
 ### Dependencies
 
-Inspect Docs requires Quarto 1.9.36 or later plus a handful of Python packages. Add them to your `dev` dependencies:
+Inspect Docs requires Quarto \>= 1.7 plus a handful of Python packages. Add them to your `dev` dependencies:
 
 ``` toml
 [dependency-groups]
@@ -71,7 +71,8 @@ doc = [
     "griffe>=2",
     "pyyaml",
     "types-PyYAML",
-    "quarto-cli>=1.9.36",
+    "rich",
+    "quarto-cli>=1.7",
 ]
 ```
 
@@ -105,7 +106,7 @@ inspect-docs:
           href: guides/install.qmd
 ```
 
-Simple items become navbar links and sidebar entries. Items with `contents` become dropdowns and sidebar sections. See [Articles](articles.html.md) for additional documentation on authoring and navigation.
+Simple items become navbar links and sidebar entries. Items with `contents` become dropdowns and sidebar sections. See [Articles](./articles.html.md) for additional documentation on authoring and navigation.
 
 ## Reference
 
@@ -121,7 +122,7 @@ reference: my_package.aio
 ### gather
 ```
 
-Each H3 is replaced with the full signature, docstring, parameters, attributes, and a link to the source on GitHub — generated via [griffe](https://mkdocstrings.github.io/griffe/). The `reference:` field is required (pages without it are ignored) and tells Inspect Docs which module’s symbols to look up. Docstrings must be [Google-style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings). See [Reference](reference.html.md) for a more in-depth guide.
+Each H3 is replaced with the full signature, docstring, parameters, attributes, and a link to the source on GitHub — generated via [griffe](https://mkdocstrings.github.io/griffe/). The `reference:` field is required (pages without it are ignored) and tells Inspect Docs which module’s symbols to look up. Docstrings must be [Google-style](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings). See [Reference](./reference.html.md) for a more in-depth guide.
 
 ## Interlinks
 
@@ -133,11 +134,11 @@ See `MyClass` and `my_function()` for details.
 
 `` `MyClass` `` (starts uppercase) links to the class’s reference page; `` `my_function()` `` (trailing `()`) links to the function’s reference page.
 
-When `external_refs` is configured, inline code also resolves against other Inspect Docs sites. See [Interlinks](interlinks.html.md) to learn more.
+When `external_refs` is configured, inline code also resolves against other Inspect Docs sites. See [Interlinks](./interlinks.html.md) to learn more.
 
 ## llms.txt
 
-Every site includes an auto-generated [`llms.txt`](https://llmstxt.org) at the root and per-page Markdown sources at `{page}.html.md`. A **Copy page** button in the page header lets readers grab the Markdown or open it in a new tab. See [llms.txt](llms.html.md) for details.
+Every site includes an auto-generated [`llms.txt`](https://llmstxt.org) at the root and per-page Markdown sources at `{page}.html.md`. A **Copy page** button in the page header lets readers grab the Markdown or open it in a new tab. See [llms.txt](./llms.html.md) for details.
 
 ## Options
 
@@ -157,9 +158,9 @@ Options available under `inspect-docs:` in `_quarto.yml`:
 | `twitter` | Twitter/X handle (without `@`). Adds a Twitter icon to the footer right. |
 | `module` | Python import name. Auto-discovered from `pyproject.toml`; set explicitly only when the import name differs from the distribution name. |
 | `cli` | CLI binary name (for Click command pages). Auto-discovered from `pyproject.toml`’s `[project.scripts]`; set explicitly when the binary name differs from the module name. |
-| `navigation` | Navbar and sidebar entries (see [Articles](articles.html.md)). |
-| `sidebar` | Show the sidebar. Defaults to `true` when `navigation` is set. |
-| `external_refs` | Map of `package_name: docs_url` for cross-package interlinking (see [Interlinks](interlinks.html.md)). |
+| `navigation` | Navbar and sidebar entries (see [Articles](./articles.html.md)). |
+| `sidebar` | Sidebar mode: `true` (default when `navigation` is set) shows the main sidebar alongside a separate reference sidebar; `false` suppresses the main sidebar; `unified` merges the reference sidebar into the main sidebar. |
+| `external_refs` | Map of `package_name: docs_url` for cross-package interlinking (see [Interlinks](./interlinks.html.md)). |
 
 ### Custom Navbar
 

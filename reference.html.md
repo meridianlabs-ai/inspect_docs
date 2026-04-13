@@ -1,4 +1,4 @@
-# Reference
+# Reference – Inspect Docs
 
 Reference pages document your package’s public API. Place `.qmd` files in a `reference/` directory and Inspect Docs auto-discovers them, builds a reference sidebar, and generates a cross-reference index. H3 headings on each page are replaced with full API documentation generated from your Python source.
 
