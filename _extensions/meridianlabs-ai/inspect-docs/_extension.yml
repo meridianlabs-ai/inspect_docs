@@ -12,7 +12,6 @@ contributes:
         - post-render.py
       resources:
         - reference/refs.json
-        - reference/cli-descriptions.json
     format: inspect-docs-html
     metadata-files:
       - _include.yml
