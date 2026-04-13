@@ -163,7 +163,7 @@ Options available under `inspect-docs:` in `_quarto.yml`:
 | `module`        | Python import name. Auto-discovered from `pyproject.toml`; set explicitly only when the import name differs from the distribution name. |
 | `cli`           | CLI binary name (for Click command pages). Auto-discovered from `pyproject.toml`'s `[project.scripts]`; set explicitly when the binary name differs from the module name. |
 | `navigation`    | Navbar and sidebar entries (see [Articles](articles.qmd)).                                   |
-| `sidebar`       | Show the sidebar. Defaults to `true` when `navigation` is set.                               |
+| `sidebar`       | Sidebar mode: `true` (default when `navigation` is set) shows the main sidebar alongside a separate reference sidebar; `false` suppresses the main sidebar; `unified` merges the reference sidebar into the main sidebar. |
 | `external_refs` | Map of `package_name: docs_url` for cross-package interlinking (see [Interlinks](interlinks.qmd)). |
 
 ### Custom Navbar
