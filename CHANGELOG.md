@@ -1,4 +1,7 @@
 
+## 1.0.4 (14 April 2026)
+
+- Interlinking for pages in sub-directories.
 
 ## 1.0.3 (12 April 2026)
 
