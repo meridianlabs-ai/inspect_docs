@@ -24,6 +24,7 @@ contributes:
       toc: true
       toc-depth: 3
       toc-expand: 1
+      lightbox: true
       code-overflow: wrap
       code-annotations: select
       fig-width: 8
