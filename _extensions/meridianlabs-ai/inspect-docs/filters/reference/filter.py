@@ -23,6 +23,15 @@ from griffe import Extensions, Module, UnpackTypedDictExtension
 import griffe
 import panflute as pf  # type: ignore
 
+# Quarto serializes some metadata values (e.g. the strings under
+# `categories:` in frontmatter) as pandoc RawInline elements whose format
+# is `"pandoc-native"`. That format isn't in panflute 2.x's RAW_FORMATS
+# set, so `pf.run_filters`'s JSON parse step raises a TypeError on any
+# document that reaches pandoc's AST through that path -- a crash well
+# before any of this filter's own logic runs. Widening the set at import
+# time lets such documents pass through unchanged.
+pf.elements.RAW_FORMATS.add("pandoc-native")  # type: ignore[attr-defined]
+
 from rich.console import Console
 
 from parse import DocParseOptions, MissingDocstringError, parse_docs
