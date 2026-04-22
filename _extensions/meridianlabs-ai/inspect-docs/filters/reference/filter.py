@@ -49,6 +49,12 @@ def _warn(message: str) -> None:
     _console.print(f"[yellow][bold]WARNING:[/bold] {message}[/yellow]")
 
 
+def _is_empty_section(elem: pf.Header) -> bool:
+    """True when no content blocks sit between this heading and the next."""
+    nxt = elem.next
+    return nxt is None or (isinstance(nxt, pf.Header) and nxt.level <= elem.level)
+
+
 def main() -> Any:
     # lazily initialized on first reference page
     parse_options_cache: list[DocParseOptions] = []
@@ -194,11 +200,14 @@ def main() -> Any:
             return elem
 
         # Inline-reference flow: on article pages (outside reference/),
-        # only H3s that have an explicit `reference="..."` attribute become
-        # symbols. Plain H3s on article pages are normal headings.
+        # H3s with an explicit `reference="..."` attribute always become
+        # symbols. Plain H3s become symbols only when their section is
+        # empty (no content before the next heading), allowing reference
+        # pages outside a reference/ directory to omit redundant attributes.
         has_explicit_attr = "reference" in elem.attributes
         if not has_explicit_attr and not is_reference_page(doc):
-            return elem
+            if not _is_empty_section(elem):
+                return elem
 
         # Symbol lookups are relative to the griffe-loaded project module,
         # so strip that prefix from `page_ref` to get the path within the
@@ -217,6 +226,11 @@ def main() -> Any:
         # parse docs
         try:
             docs = parse_docs(object, parse_options)
+        except KeyError:
+            if has_explicit_attr:
+                _warn(f"reference: symbol '{object}' not found (skipping)")
+                return []
+            return elem
         except MissingDocstringError as e:
             _warn(f"reference: {e} (skipping)")
             return []
