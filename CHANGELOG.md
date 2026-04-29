@@ -1,3 +1,6 @@
+## Unreleased
+
+- Skip griffe step if there is no reference generation in play.
 
 ## 1.0.4 (14 April 2026)
 
